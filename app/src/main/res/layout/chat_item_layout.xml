@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	>
+
+	<androidx.recyclerview.widget.RecyclerView
+		android:id="@+id/messagesList"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_weight="1.0"
+		/>
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+        android:maxHeight="250dp"
+        android:gravity="bottom"
+		android:layout_height="wrap_content">
+
+		<com.google.android.material.card.MaterialCardView
+			app:cardCornerRadius="20dp"
+			app:cardPreventCornerOverlap="true"
+			app:useCompatPadding="true"
+			app:cardElevation="10dp"
+            android:maxHeight="250dp"
+			android:layout_height="50dp"
+			android:layout_weight="1.0"
+			android:layout_width="wrap_content"
+			android:layout_margin="2dp">
+
+			<LinearLayout
+				android:orientation="horizontal"
+				android:layout_width="match_parent"
+                android:gravity="bottom"
+				android:layout_height="match_parent"
+				android:background="#FFFFFFFF">
+
+				<ImageView
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    
+                    android:src="@drawable/ic_emoji"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_weight="1.0"
+                    android:adjustViewBounds="true"
+                    android:id="@+id/chatEmoji"
+                    
+                    android:layout_marginLeft="5dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="5dp"/>
+
+                
+				<EditText
+					android:layout_width="wrap_content"
+					android:ems="10"
+					android:layout_height="match_parent"
+					android:layout_weight="1.0"
+                    android:inputType="textMultiLine"
+                    
+					android:hint="Type a message..."
+                   android:typeface="normal"
+					android:background="#FFFFFFFF"
+					android:id="@+id/chatMessage"/>
+
+                <ImageView
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_attach"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_weight="1.0"
+                    android:elevation="10dp"
+                    android:adjustViewBounds="true"
+                    android:layout_gravity="center_vertical"
+                    android:id="@+id/chatAttachment"
+                    android:layout_margin="8dp"
+                    
+                    android:layout_marginRight="1dp"/>
+
+                <ImageView
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    
+                    android:src="@drawable/ic_cam"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_weight="1.0"
+                    android:adjustViewBounds="true"
+                    android:id="@+id/chatCam"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="5dp"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginRight="5dp"
+                    />
+                
+			</LinearLayout>
+
+		</com.google.android.material.card.MaterialCardView>
+
+		<com.google.android.material.floatingactionbutton.FloatingActionButton
+			app:srcCompat="@drawable/ic_microphone"
+			android:layout_width="wrap_content"
+			android:elevation="10dp"
+			android:layout_height="wrap_content"
+            android:backgroundTint="@color/purple_a700"
+			android:id="@+id/chatMphone_send"
+			android:layout_margin="2dp"/>
+
+	</LinearLayout>
+
+</LinearLayout>
+

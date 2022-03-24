@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="horizontal"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:padding="5dp">
+
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:background="@drawable/message_recieve_bg"
+		android:elevation="10dp">
+
+		<ImageView
+			android:src="@drawable/ic_profile"
+			android:layout_width="150dp"
+			android:layout_height="150dp"
+			android:id="@+id/recievemessageImage"
+			android:visibility="gone"
+			android:padding="2dp"/>
+
+		<LinearLayout
+            android:id="@+id/recieve_PdfContainer"
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
+
+			<ImageView
+				android:src="@drawable/ic_attach_pdf"
+				android:layout_width="40dp"
+				android:layout_height="40dp"/>
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:text="My Pdf"
+				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:gravity="center_vertical"
+				android:padding="5dp"
+				android:id="@+id/recievePdfName"
+				android:typeface="serif"
+				android:textColor="#FF3E2723"/>
+
+		</LinearLayout>
+
+		<LinearLayout
+			android:orientation="vertical"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:gravity="left"
+			android:padding="3dp">
+
+			<TextView
+				android:orientation="vertical"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="TextView"
+				android:id="@+id/recievedMessage"
+				android:linksClickable="true"
+				android:maxWidth="220dp"
+				android:paddingTop="5dp"
+				android:autoLink="web"
+				android:paddingBottom="5dp"
+				android:paddingRight="10dp"
+				android:textColor="#FF3E2723"
+				android:textIsSelectable="true"
+				android:textColorLink="#FF68BBE4">
+
+			</TextView>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="12:03pm"
+				android:layout_gravity="bottom|right"
+				android:id="@+id/recieveTimeStamp"
+				android:textColor="#FF000000"/>
+
+		</LinearLayout>
+
+	</LinearLayout>
+
+</LinearLayout>
+

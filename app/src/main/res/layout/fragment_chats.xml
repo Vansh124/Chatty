@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<androidx.recyclerview.widget.RecyclerView
+		android:id="@+id/userStatusList"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"/>
+
+	<View
+		android:layout_height="1dp"
+		android:layout_width="match_parent"
+		android:background="#FF5C5C5C"/>
+
+	<androidx.recyclerview.widget.RecyclerView
+		android:id="@+id/chatsList"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		tools:listItem="@layout/user_profile_chats_item_layout"
+		app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+		android:layout_weight="1.0"/>
+
+</LinearLayout>
+

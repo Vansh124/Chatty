@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:gravity="center">
+
+	<ImageView
+		android:src="@android:drawable/ic_delete"
+		android:layout_width="200dp"
+		android:layout_height="220dp"
+		android:id="@+id/userDialogProfileImage"/>
+
+	<TextView
+		android:layout_width="200dp"
+		android:layout_height="wrap_content"
+		android:text="Amol"
+		android:textAppearance="?android:attr/textAppearanceLarge"
+		android:background="#FF292929"
+		android:alpha="0.5"
+		android:textColor="#FFFFFFFF"
+		android:padding="5dp"
+		android:layout_centerHorizontal="true"
+		android:id="@+id/userDialogName"/>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="200dp"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/userDialogProfileImage"
+		android:id="@+id/dialogviewuserprofilelistsLinearLayout1"
+		android:background="#FF808080">
+
+		<ImageView
+			android:src="@drawable/dialog_user_chat"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_weight="1.0"
+			android:padding="5dp"
+			android:id="@+id/userDialogChat"/>
+
+		<ImageView
+			android:src="@drawable/dialog_user_info"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_weight="1.0"
+			android:padding="5dp"
+			android:id="@+id/userDialogInfo"/>
+
+	</LinearLayout>
+
+	<View
+		android:background="?android:attr/dividerVertical"
+		android:layout_width="200dp"
+		android:layout_height="1dp"
+		android:layout_above="@id/dialogviewuserprofilelistsLinearLayout1"/>
+
+</RelativeLayout>
+

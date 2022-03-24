@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<de.hdodenhof.circleimageview.CircleImageView
+		android:src="@drawable/ic_profile"
+		android:layout_width="100dp"
+		android:layout_height="100dp"
+		android:layout_margin="40dp"
+		android:layout_gravity="center_horizontal"
+		android:id="@+id/profile_image"/>
+
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:padding="15dp"
+		android:layout_gravity="center_horizontal">
+
+		<EditText
+			android:layout_width="wrap_content"
+			android:inputType="textPersonName"
+			android:layout_height="wrap_content"
+			android:ems="10"
+			android:hint="Username"
+			android:id="@+id/userProfileUsername"
+			android:typeface="serif"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Your name will be visible to your contacts."
+			android:textAppearance="?android:attr/textAppearanceSmall"
+			android:textStyle="bold"
+			android:typeface="serif"/>
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_gravity="bottom">
+
+		<com.google.android.material.button.MaterialButton
+			style="@style/Widget.MaterialComponents.Button"
+			app:cornerRadius="10dp"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Proceed"
+			android:layout_gravity="bottom"
+			android:layout_weight="1.0"
+			android:padding="15dp"
+			android:id="@+id/userProceedDetails"
+			android:backgroundTint="#FF24C54C"
+			android:textStyle="bold"
+			android:textColor="#FFFFFFFF"
+			android:typeface="serif"
+			android:layout_margin="10dp"/>
+
+	</LinearLayout>
+
+</LinearLayout>
+

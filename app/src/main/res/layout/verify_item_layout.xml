@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:gravity="center_horizontal">
+
+	<ImageView
+		android:src="@drawable/my_icon"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_margin="40dp"
+		android:layout_marginBottom="40dp"/>
+
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_margin="30dp"
+		android:padding="10dp">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Verify your phone number"
+			android:textStyle="bold"
+			android:textAppearance="?attr/textAppearanceHeadline5"/>
+
+		<com.google.android.material.textfield.TextInputLayout
+			style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:ems="15"
+			android:hint="Enter Otp Here"
+			android:background="@null"
+			android:layout_marginTop="20dp">
+
+			<EditText
+				android:layout_width="match_parent"
+				android:inputType="phone"
+				android:layout_height="match_parent"
+				android:ems="15"
+			    android:maxLength="6"
+                
+				android:id="@+id/inputOtp"/>
+
+		</com.google.android.material.textfield.TextInputLayout>
+
+		<com.google.android.material.button.MaterialButton
+			style="@style/Widget.MaterialComponents.Button"
+			app:cornerRadius="10dp"
+			app:strokeColor="#FF199211"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text="Verify Otp"
+			android:layout_gravity="center_horizontal"
+			android:layout_marginTop="10dp"
+			android:padding="15dp"
+			android:id="@+id/submitOtp"/>
+
+	</LinearLayout>
+
+</LinearLayout>
+
