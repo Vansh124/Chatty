@@ -15,9 +15,13 @@
         android:supportsRtl="true"
         android:hardwareAccelerated="true"
         android:usesCleartextTraffic="true"
+        
         android:theme="@style/AppTheme">
 
-        <activity android:name=".activity.SplashActivity">
+        <activity 
+            android:name=".activity.SplashActivity"
+            android:exported="true"
+            >
 
             <intent-filter>
 
@@ -32,45 +36,65 @@
         <activity
             android:name=".activity.MainActivity"
             android:launchMode="singleTop"
-            android:label="Chatty"/>
+            android:label="Chatty"
+            android:exported="true"
+            />
 
         <activity
             android:name=".activity.RegisterActivity"
             android:launchMode="singleTop"
-            android:label="Register"/>
+            android:label="Register"
+            android:exported="true"
+            />
 
         <activity
             android:name=".activity.VerifyActivity"
             android:launchMode="singleTop"
-            android:label="Verify"/>
+            android:label="Verify"
+            android:exported="true"
+            />
 
         <activity
             android:name=".activity.ProfileActivity"
-            android:launchMode="singleTop"/>
+            android:launchMode="singleTop"
+            android:exported="true"
+            />
 
         <activity
             android:name=".activity.AddProfileDetails"
-            android:launchMode="singleTop"/>
+            android:launchMode="singleTop"
+            android:exported="true"
+            />
 
         <activity
             android:name=".activity.ChatActivity"
-            android:launchMode="singleTop"/>
+            android:launchMode="singleTop"
+            android:exported="true"
+            />
 
        
 
-        <activity android:name=".activity.GroupActivity"
+        <activity 
+            android:name=".activity.GroupActivity"
             android:launchMode="singleTop"
+            android:exported="true"
             />
 
-        <activity android:name=".activity.GroupAddUsers"
+        <activity 
+            android:name=".activity.GroupAddUsers"
             android:launchMode="singleTop"
             android:label="Add Users"
+            android:exported="true"
             />
-        <activity android:name=".activity.StatusViewActivity"
-               android:launchMode="singleTop"
-        />
-        <activity android:name=".activity.GroupChatActivity"
+        <activity 
+            android:name=".activity.StatusViewActivity"
             android:launchMode="singleTop"
+            android:exported="true"
+        />
+        <activity 
+            android:name=".activity.GroupChatActivity"
+            android:launchMode="singleTop"
+            android:exported="true"
             />
         <meta-data android:name="com.google.android.safetynet.ATTEST_API_KEY"
             android:value="AIzaSyA7Vhu_mz6xShfjbUAqm4auwMjbb8GPc14"/>
@@ -78,3 +102,4 @@
     </application>
 
 </manifest>
+
