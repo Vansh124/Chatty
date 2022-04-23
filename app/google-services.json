@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "367517042902",
+    "firebase_url": "https://whatsapp-309407-default-rtdb.firebaseio.com",
+    "project_id": "whatsapp-309407",
+    "storage_bucket": "whatsapp-309407.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:367517042902:android:c09e4bf03ab68d4752e177",
+        "android_client_info": {
+          "package_name": "com.amol.realapp.chatty"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "367517042902-ddfepm2q1jfvtevsc512oehs7eaee979.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.amol.realapp.chatty",
+            "certificate_hash": "efc9bec949d4521234f9a5a4cf8afb11b0844591"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAexbt0ScVq-47l3yC0Qthk6TvvqnUbtw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
