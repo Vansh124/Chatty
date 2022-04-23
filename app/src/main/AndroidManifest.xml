@@ -96,10 +96,13 @@
             android:launchMode="singleTop"
             android:exported="true"
             />
-        <meta-data android:name="com.google.android.safetynet.ATTEST_API_KEY"
-            android:value="AIzaSyA7Vhu_mz6xShfjbUAqm4auwMjbb8GPc14"/>
-       
+        
     </application>
 
 </manifest>
+
+
+
+
+
 
