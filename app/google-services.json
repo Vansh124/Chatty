@@ -15,31 +15,22 @@
       },
       "oauth_client": [
         {
-          "client_id": "367517042902-s39uusgdv17kqg5ngmjmctkvs2lbu947.apps.googleusercontent.com",
+          "client_id": "367517042902-ddfepm2q1jfvtevsc512oehs7eaee979.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.amol.realapp.chatty",
-            "certificate_hash": "db0b471215ad853122da18bcf973c5589effcd3e"
+            "certificate_hash": "efc9bec949d4521234f9a5a4cf8afb11b0844591"
           }
-        },
-        {
-          "client_id": "367517042902-gvpc97qccsq7vjg9mvar61mt88nv2vmq.apps.googleusercontent.com",
-          "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA7Vhu_mz6xShfjbUAqm4auwMjbb8GPc14"
+          "current_key": "AIzaSyCAexbt0ScVq-47l3yC0Qthk6TvvqnUbtw"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "367517042902-gvpc97qccsq7vjg9mvar61mt88nv2vmq.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }
