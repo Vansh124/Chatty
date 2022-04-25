@@ -9,7 +9,7 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.sp_screen);
+        setContentView(R.layout.activity_splash);
         Thread thread=new Thread(){
       public void run(){
           try{
@@ -30,3 +30,5 @@ public class SplashActivity extends AppCompatActivity {
     
     
 }
+
+

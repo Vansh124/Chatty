@@ -12,7 +12,7 @@
 		android:layout_height="wrap_content"
 		android:layout_gravity="center_horizontal"
 		android:layout_margin="40dp"
-		android:src="@drawable/my_icon"
+		android:src="@drawable/ic_app_icon"
 		android:layout_marginBottom="0dp"/>
 
 	<LinearLayout
@@ -65,4 +65,5 @@
 	</LinearLayout>
 
 </LinearLayout>
+
 

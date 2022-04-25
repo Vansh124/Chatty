@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="#BA68C8"
+	android:gravity="center_horizontal">
+
+	<ImageView
+		android:src="@drawable/ic_app_icon"
+		android:layout_width="120dp"
+		android:layout_height="120dp"
+		android:layout_marginTop="90dp"
+		android:elevation="6dp"/>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:gravity="bottom|center_horizontal">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="From \n Amol Chandra"
+			android:textAppearance="?attr/textAppearanceHeadline5"
+			android:textColor="#FFFFFFFF"
+			android:textStyle="bold"
+			android:layout_gravity="bottom|center_horizontal"
+			android:layout_marginBottom="40dp"/>
+
+	</LinearLayout>
+
+</LinearLayout>
+
+
+
+
+
