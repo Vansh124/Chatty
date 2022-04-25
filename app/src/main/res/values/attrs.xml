@@ -4,3 +4,4 @@
         <attr name="progressCount" format="integer|reference" />
     </declare-styleable>
 </resources>
+
