@@ -1,44 +1,34 @@
 package com.amol.realapp.chatty.activity;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.viewpager2.widget.ViewPager2;
-import com.amol.realapp.chatty.R;
-import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.tabs.TabLayoutMediator;
-import com.google.firebase.database.DatabaseReference;
-import android.util.Log;
-import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import android.view.MenuItem;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import com.amol.realapp.chatty.R;
 import com.amol.realapp.chatty.fragment.ChatsFragment;
 import com.amol.realapp.chatty.fragment.GroupsFragment;
-import com.amol.realapp.chatty.fragment.StatusFragment;
-import androidx.fragment.app.FragmentManager;
-import com.google.firebase.database.FirebaseDatabase;
-import android.content.Intent;
-import com.amol.realapp.chatty.model.userStatus;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.FirebaseStorage;
-import java.util.Date;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.firebase.storage.UploadTask;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.OnSuccessListener;
-import android.net.Uri;
+import com.amol.realapp.chatty.model.Status;
 import com.amol.realapp.chatty.model.userProfile;
+import com.amol.realapp.chatty.model.userStatus;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import java.util.Date;
 import java.util.HashMap;
-import com.amol.realapp.chatty.model.Status;
-import android.widget.Toast;
-import android.content.SharedPreferences;
-import android.content.Context;
-import android.preference.PreferenceManager;
 
 public class MainActivity extends AppCompatActivity {
   private MaterialToolbar tBar;
@@ -48,9 +38,6 @@ public class MainActivity extends AppCompatActivity {
 
   private userProfile user;
 
-  private String key;
-  private SharedPreferences sPref;
-
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -58,8 +45,6 @@ public class MainActivity extends AppCompatActivity {
 
     init();
     listener();
-    
-    
   }
 
   private void listener() {
@@ -113,8 +98,6 @@ public class MainActivity extends AppCompatActivity {
               @Override
               public void onCancelled(DatabaseError p1) {}
             });
-            
-            
   }
 
   private void init() {
@@ -162,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
 
                                   String imageUrl = p1.toString();
                                   Status status = new Status(imageUrl, uStatus.getLastUpdated());
-                                  
+
                                   FirebaseDatabase.getInstance()
                                       .getReference()
                                       .child("Stories")
@@ -185,7 +168,3 @@ public class MainActivity extends AppCompatActivity {
     }
   }
 }
-
-
-
-

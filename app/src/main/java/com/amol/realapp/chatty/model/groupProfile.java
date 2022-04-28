@@ -1,41 +1,38 @@
 package com.amol.realapp.chatty.model;
 
 public class groupProfile {
-    
-    private String groupUid,groupName,groupProfile;
 
-    public groupProfile(String groupUid, String groupName, String groupProfile) {
-        this.groupUid = groupUid;
-        this.groupName = groupName;
-        this.groupProfile = groupProfile;
-    }
-    public groupProfile(){
-        
-    }
+  private String groupUid, groupName, groupProfile;
 
-    public void setGroupUid(String groupUid) {
-        this.groupUid = groupUid;
-    }
+  public groupProfile(String groupUid, String groupName, String groupProfile) {
+    this.groupUid = groupUid;
+    this.groupName = groupName;
+    this.groupProfile = groupProfile;
+  }
 
-    public String getGroupUid() {
-        return groupUid;
-    }
+  public groupProfile() {}
 
-    public void setGroupName(String groupName) {
-        this.groupName = groupName;
-    }
+  public void setGroupUid(String groupUid) {
+    this.groupUid = groupUid;
+  }
 
-    public String getGroupName() {
-        return groupName;
-    }
+  public String getGroupUid() {
+    return groupUid;
+  }
 
-    public void setGroupProfile(String groupProfile) {
-        this.groupProfile = groupProfile;
-    }
+  public void setGroupName(String groupName) {
+    this.groupName = groupName;
+  }
 
-    public String getGroupProfile() {
-        return groupProfile;
-    }
-    
-    
-    }
+  public String getGroupName() {
+    return groupName;
+  }
+
+  public void setGroupProfile(String groupProfile) {
+    this.groupProfile = groupProfile;
+  }
+
+  public String getGroupProfile() {
+    return groupProfile;
+  }
+}
