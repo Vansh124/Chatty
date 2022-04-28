@@ -1,464 +1,453 @@
 package com.amol.realapp.chatty.activity;
-import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.Dialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import androidx.appcompat.widget.Toolbar;
-import java.util.ArrayList;
-import com.amol.realapp.chatty.model.Message;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import android.os.StrictMode;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.EditText;
-import com.google.firebase.database.FirebaseDatabase;
-import androidx.recyclerview.widget.RecyclerView;
 import android.widget.ImageView;
-import com.google.firebase.storage.FirebaseStorage;
-import de.hdodenhof.circleimageview.CircleImageView;
-import android.widget.TextView;
-import com.google.firebase.database.DatabaseReference;
 import android.widget.LinearLayout;
-import java.io.File;
-import com.google.firebase.auth.FirebaseAuth;
+import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import com.amol.realapp.chatty.R;
+import com.amol.realapp.chatty.adapter.groupMessageAdapter;
+import com.amol.realapp.chatty.model.Message;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.amol.realapp.chatty.R;
-import com.amol.realapp.chatty.adapter.messageAdapter;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import android.view.View;
-import com.google.firebase.database.ValueEventListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import de.hdodenhof.circleimageview.CircleImageView;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Calendar;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.amol.realapp.chatty.adapter.groupMessageAdapter;
-import android.view.LayoutInflater;
-import android.app.Dialog;
-import android.os.StrictMode;
-import android.content.Intent;
-import com.google.firebase.storage.StorageReference;
-import android.net.Uri;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.firebase.storage.UploadTask;
-import com.google.android.gms.tasks.Task;
+
 public class GroupChatActivity extends AppCompatActivity {
-    Toolbar tb;
-    ArrayList<Message> messages;
-    groupMessageAdapter gMessageAdapter;
-    private String groupName,txt_profile,recieverUid,senderUid;
-    private String senderRoom,mainRoom;
-    private String filePath,pdfFilePath;
-    private FloatingActionButton sendMessage;
-    private EditText messageBox;
-    private FirebaseDatabase database;
-    private RecyclerView messagesList;
-    private ImageView icEmoji,icAttach,icCam,icBack;
-    private FirebaseStorage storage;
-    private TextView name,statusIndicator;
-    private CircleImageView profileImage;
-    private DatabaseReference messageReference;
+  private Toolbar tb;
+  private ArrayList<Message> messages;
+  private groupMessageAdapter gMessageAdapter;
+  private String groupName, txt_profile, recieverUid, senderUid;
+  private String senderRoom, mainRoom;
+  private String filePath, pdfFilePath;
+  private FloatingActionButton sendMessage;
+  private EditText messageBox;
+  private FirebaseDatabase database;
+  private RecyclerView messagesList;
+  private ImageView icAttach, icCam, icBack;
+  private FirebaseStorage storage;
+  private TextView name, statusIndicator;
+  private CircleImageView profileImage;
+  private DatabaseReference messageReference;
 
-    private LinearLayout attachPdfs,attachDoc,attachAudio,attachGallery;
+  private LinearLayout attachPdfs, attachDoc, attachAudio, attachGallery;
 
-    private static final int GET_GALLERY=11;
-    private static final int GET_CAMERA=18;
-    private static final int GET_PDFS=12;
+  private static final int GET_GALLERY = 11;
+  private static final int GET_PDFS = 12;
 
-    private static final int PERMISSION_CAMERA=88;
-    private File pdfFile, uploadFile;
+  private File uploadFile;
 
-    
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_group_chat);
-        init();
-        initListener();
-    }
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_group_chat);
+    init();
+    initListener();
+  }
 
-    private void init() {
-        tb = findViewById(R.id.toolbar);
-        icBack=findViewById(R.id.groupBack);
-        profileImage=findViewById(R.id.groupProfileImage);
-        name=findViewById(R.id.groupProfileName);
-        statusIndicator=findViewById(R.id.online_text_indicator);
+  private void init() {
+    tb = findViewById(R.id.toolbar);
+    icBack = findViewById(R.id.groupBack);
+    profileImage = findViewById(R.id.groupProfileImage);
+    name = findViewById(R.id.groupProfileName);
+    statusIndicator = findViewById(R.id.online_text_indicator);
 
-        groupName = getIntent().getStringExtra("groupName");
-         txt_profile=getIntent().getStringExtra("groupProfile");
-        
-        mainRoom = getIntent().getStringExtra("groupUid");
-        
-        senderUid = FirebaseAuth.getInstance().getUid();
-        
-        
+    groupName = getIntent().getStringExtra("groupName");
+    txt_profile = getIntent().getStringExtra("groupProfile");
 
-        messages = new ArrayList<>();
-        gMessageAdapter = new groupMessageAdapter(GroupChatActivity.this, messages,mainRoom);
-        senderRoom = senderUid + recieverUid;
-      //  recieverRoom = recieverUid + senderUid;
+    mainRoom = getIntent().getStringExtra("groupUid");
 
-        messageBox = findViewById(R.id.chatMessage);
-        sendMessage = findViewById(R.id.chatMphone_send);
-        database = FirebaseDatabase.getInstance();
-        storage = FirebaseStorage.getInstance();
-        messagesList = findViewById(R.id.messagesList);
-        messagesList.setLayoutManager(new LinearLayoutManager(GroupChatActivity.this));
-        messagesList.setAdapter(gMessageAdapter);
+    senderUid = FirebaseAuth.getInstance().getUid();
 
-        icAttach = findViewById(R.id.chatAttachment);
-        icCam=findViewById(R.id.chatCam);
-        
-    }
+    messages = new ArrayList<>();
+    gMessageAdapter = new groupMessageAdapter(GroupChatActivity.this, messages, mainRoom);
+    senderRoom = senderUid + recieverUid;
+    //  recieverRoom = recieverUid + senderUid;
 
-    private void initListener() {
-        setSupportActionBar(tb);
-        Glide.with(GroupChatActivity.this).load(txt_profile).centerCrop().thumbnail(0.05f).diskCacheStrategy(DiskCacheStrategy.ALL).into(profileImage);
-        name.setText(groupName);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        
-        icBack.setOnClickListener(new View.OnClickListener() {
+    messageBox = findViewById(R.id.chatMessage);
+    sendMessage = findViewById(R.id.chatMphone_send);
+    database = FirebaseDatabase.getInstance();
+    storage = FirebaseStorage.getInstance();
+    messagesList = findViewById(R.id.messagesList);
+    messagesList.setLayoutManager(new LinearLayoutManager(GroupChatActivity.this));
+    messagesList.setAdapter(gMessageAdapter);
 
-                @Override
-                public void onClick(View view) {
-                    finish();
-                }
-            });
+    icAttach = findViewById(R.id.chatAttachment);
+    icCam = findViewById(R.id.chatCam);
+  }
 
-        sendMessage.setOnClickListener(new View.OnClickListener() {
+  private void initListener() {
+    setSupportActionBar(tb);
+    Glide.with(GroupChatActivity.this)
+        .load(txt_profile)
+        .centerCrop()
+        .thumbnail(0.05f)
+        .diskCacheStrategy(DiskCacheStrategy.ALL)
+        .into(profileImage);
+    name.setText(groupName);
+    getSupportActionBar().setDisplayShowTitleEnabled(false);
+    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
-                @Override
-                public void onClick(View view) {
-                    String messageTxt=messageBox.getText().toString();
-                    if (messageTxt.isEmpty()) {
+    icBack.setOnClickListener(
+        new View.OnClickListener() {
 
-                    } else {
-                        sendMessage(messageTxt);
-                    }
+          @Override
+          public void onClick(View view) {
+            finish();
+          }
+        });
 
+    sendMessage.setOnClickListener(
+        new View.OnClickListener() {
 
-                }
+          @Override
+          public void onClick(View view) {
+            String messageTxt = messageBox.getText().toString();
+            if (messageTxt.isEmpty()) {
 
+            } else {
+              sendMessage(messageTxt);
+            }
+          }
+        });
 
-            });
-            
-        icAttach.setOnClickListener(new View.OnClickListener() {
+    icAttach.setOnClickListener(
+        new View.OnClickListener() {
 
-                @Override
-                public void onClick(View view) {
-                    dialogAttachment();
-                }
-            });   
-        icCam.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View view) {
+            dialogAttachment();
+          }
+        });
+    icCam.setOnClickListener(
+        new View.OnClickListener() {
 
-                @Override
-                public void onClick(View view) {
+          @Override
+          public void onClick(View view) {}
+        });
+  }
 
-                }
-            });     
-    }
-    
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch(requestCode){
-            case GET_GALLERY:
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    switch (requestCode) {
+      case GET_GALLERY:
+        if (data != null) {
+          if (data.getData() != null) {
+            Uri selectedImage = data.getData();
+            Calendar cal = Calendar.getInstance();
 
-                if (data != null) {
-                    if (data.getData() != null) {
-                        Uri selectedImage=data.getData();
-                        Calendar cal=Calendar.getInstance();
+            final StorageReference strRef =
+                storage.getReference().child("Group-Chats").child(cal.getTimeInMillis() + "");
+            View v =
+                LayoutInflater.from(GroupChatActivity.this)
+                    .inflate(R.layout.dialog_attachment, null, false);
+            final Dialog mDialog = new Dialog(GroupChatActivity.this);
+            mDialog.setContentView(v);
+            mDialog.setCancelable(false);
 
-                        final StorageReference strRef=storage.getReference().child("Group-Chats").child(cal.getTimeInMillis() + "");
-                        View v=LayoutInflater.from(GroupChatActivity.this).inflate(R.layout.dialog_attachment,null,false);
-                        final Dialog mDialog=new Dialog(GroupChatActivity.this);
-                        mDialog.setContentView(v);
-                        mDialog.setCancelable(false);
+            strRef
+                .putFile(selectedImage)
+                .addOnCompleteListener(
+                    new OnCompleteListener<UploadTask.TaskSnapshot>() {
 
+                      @Override
+                      public void onComplete(Task<UploadTask.TaskSnapshot> p1) {
+                        if (p1.isSuccessful()) {
+                          strRef
+                              .getDownloadUrl()
+                              .addOnSuccessListener(
+                                  new OnSuccessListener<Uri>() {
 
-
-                        strRef.putFile(selectedImage).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>(){
-
-                                @Override
-                                public void onComplete(Task<UploadTask.TaskSnapshot> p1) {
-                                    if(p1.isSuccessful()){
-                                        strRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>(){
-
-                                                @Override
-                                                public void onSuccess(Uri p1) {
-                                                    filePath=p1.toString();
-                                                    mDialog.dismiss();
-                                                    String messageTxt=messageBox.getText().toString();
-                                                    sendMessageWithImage(messageTxt);
-
-                                                }
-
-
-                                            });
+                                    @Override
+                                    public void onSuccess(Uri p1) {
+                                      filePath = p1.toString();
+                                      mDialog.dismiss();
+                                      String messageTxt = messageBox.getText().toString();
+                                      sendMessageWithImage(messageTxt);
                                     }
-                                }
-
-
-                            });
-                        mDialog.show();
-                    }
-                } 
-
-
-                break;
-
-            case GET_PDFS:
-
-                if (data != null) {
-
-                    if (data.getData() != null) {
-                        Uri selectedPdf=data.getData();
-                        uploadFile=new File(selectedPdf.getPath());
-                        Calendar cal=Calendar.getInstance();
-                        final StorageReference strRef=storage.getReference().child("Group-Chats").child(uploadFile.getName());
-                        View v=LayoutInflater.from(GroupChatActivity.this).inflate(R.layout.dialog_attachment,null,false);
-                        final Dialog mDialog=new Dialog(GroupChatActivity.this);
-                        mDialog.setContentView(v);
-                        mDialog.setCancelable(false);
-
-                        strRef.putFile(selectedPdf).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>(){
-
-                                @Override
-                                public void onComplete(Task<UploadTask.TaskSnapshot> p1) {
-                                    if(p1.isSuccessful()){
-                                        strRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>(){
-
-                                                @Override
-                                                public void onSuccess(Uri p1) {
-                                                    pdfFilePath=p1.toString();
-
-                                                    mDialog.dismiss();
-                                                    String messageTxt=messageBox.getText().toString();
-                                                    sendMessageWithPdf(messageTxt);
-
-                                                }
-
-
-                                            });
-                                    }
-                                }
-
-
-                            });
-                        mDialog.show();
-
-
-
-                    }
-                }
-
-                break;
-
+                                  });
+                        }
+                      }
+                    });
+            mDialog.show();
+          }
         }
 
+        break;
 
+      case GET_PDFS:
+        if (data != null) {
+
+          if (data.getData() != null) {
+            Uri selectedPdf = data.getData();
+            uploadFile = new File(selectedPdf.getPath());
+            Calendar cal = Calendar.getInstance();
+            final StorageReference strRef =
+                storage.getReference().child("Group-Chats").child(uploadFile.getName());
+            View v =
+                LayoutInflater.from(GroupChatActivity.this)
+                    .inflate(R.layout.dialog_attachment, null, false);
+            final Dialog mDialog = new Dialog(GroupChatActivity.this);
+            mDialog.setContentView(v);
+            mDialog.setCancelable(false);
+
+            strRef
+                .putFile(selectedPdf)
+                .addOnCompleteListener(
+                    new OnCompleteListener<UploadTask.TaskSnapshot>() {
+
+                      @Override
+                      public void onComplete(Task<UploadTask.TaskSnapshot> p1) {
+                        if (p1.isSuccessful()) {
+                          strRef
+                              .getDownloadUrl()
+                              .addOnSuccessListener(
+                                  new OnSuccessListener<Uri>() {
+
+                                    @Override
+                                    public void onSuccess(Uri p1) {
+                                      pdfFilePath = p1.toString();
+
+                                      mDialog.dismiss();
+                                      String messageTxt = messageBox.getText().toString();
+                                      sendMessageWithPdf(messageTxt);
+                                    }
+                                  });
+                        }
+                      }
+                    });
+            mDialog.show();
+          }
+        }
+
+        break;
     }
-    
-    
-    
-    private void recieveMessage() {
-        //Recieve Messsages
+  }
 
-        messageReference=database.getReference().child("Group-Chats").child(mainRoom).child("messages");
-        messageReference.keepSynced(true);
-        messageReference
-            .addValueEventListener(new ValueEventListener(){
+  private void recieveMessage() {
+    // Recieve Messsages
 
-                @Override
-                public void onDataChange(DataSnapshot p1) {
-                    messages.clear();
-                    for (DataSnapshot snapshot1:p1.getChildren()) {
-                        Message message=snapshot1.getValue(Message.class);   
-                        messages.add(message);
-                        messagesList.smoothScrollToPosition(gMessageAdapter.getItemCount());
+    messageReference =
+        database.getReference().child("Group-Chats").child(mainRoom).child("messages");
+    messageReference.keepSynced(true);
+    messageReference.addValueEventListener(
+        new ValueEventListener() {
 
+          @Override
+          public void onDataChange(DataSnapshot p1) {
+            messages.clear();
+            for (DataSnapshot snapshot1 : p1.getChildren()) {
+              Message message = snapshot1.getValue(Message.class);
+              messages.add(message);
+              messagesList.smoothScrollToPosition(gMessageAdapter.getItemCount());
+            }
+            gMessageAdapter.notifyDataSetChanged();
+          }
 
-                    }
-                    gMessageAdapter.notifyDataSetChanged();
+          @Override
+          public void onCancelled(DatabaseError p1) {}
+        });
+  }
 
-                }
+  private void sendMessage(String messageTxt) {
 
-                @Override
-                public void onCancelled(DatabaseError p1) {
-                }
+    final String randomKey = database.getReference().push().getKey();
 
+    Date date = new Date();
+    final Message message = new Message(messageTxt, senderUid, date.getTime());
 
+    messageBox.setText("");
+
+    HashMap<String, Object> lastMessageObj = new HashMap<>();
+    lastMessageObj.put("lastMessage", message.getMessage());
+    lastMessageObj.put("lastMessageTime", Calendar.getInstance().getTimeInMillis());
+    database
+        .getReference()
+        .child("Group-Chats")
+        .child(mainRoom)
+        .child("lstMsg")
+        .updateChildren(lastMessageObj);
+
+    database
+        .getReference()
+        .child("Group-Chats")
+        .child(mainRoom)
+        .child("messages")
+        .push()
+        .setValue(message)
+        .addOnSuccessListener(
+            new OnSuccessListener<Void>() {
+
+              @Override
+              public void onSuccess(Void p1) {}
             });
-    }
+  }
 
+  @Override
+  protected void onStart() {
+    super.onStart();
+    recieveMessage();
+  }
 
+  private void sendMessageWithImage(String messageTxt) {
+    final String randomKey = database.getReference().push().getKey();
 
-    private void sendMessage(String messageTxt) {
+    Date date = new Date();
+    final Message message = new Message(messageTxt, senderUid, date.getTime());
+    message.setMessage("Photo");
+    message.setImageUrl(filePath);
 
-        final String randomKey=database.getReference().push().getKey();
+    messageBox.setText("");
 
-        Date date=new Date();
-        final Message message=new Message(messageTxt, senderUid,date.getTime());
+    HashMap<String, Object> lastMessageObj = new HashMap<>();
+    lastMessageObj.put("lastMessage", message.getMessage());
+    lastMessageObj.put("lastMessageTime", Calendar.getInstance().getTimeInMillis());
+    database
+        .getReference()
+        .child("Group-Chats")
+        .child(mainRoom)
+        .child("lstMsg")
+        .updateChildren(lastMessageObj);
 
-        messageBox.setText("");
+    database
+        .getReference()
+        .child("Group-Chats")
+        .child(mainRoom)
+        .child("messages")
+        .child(randomKey)
+        .setValue(message)
+        .addOnSuccessListener(
+            new OnSuccessListener<Void>() {
 
-        HashMap<String,Object> lastMessageObj=new HashMap<>();
-        lastMessageObj.put("lastMessage",message.getMessage());
-        lastMessageObj.put("lastMessageTime",Calendar.getInstance().getTimeInMillis());
-        database.getReference().child("Group-Chats").child(mainRoom).child("lstMsg").updateChildren(lastMessageObj);
-        
-        database.getReference().child("Group-Chats")
-            .child(mainRoom)
-            .child("messages")
-            .push()
-            .setValue(message).addOnSuccessListener(new OnSuccessListener<Void>(){
+              @Override
+              public void onSuccess(Void p1) {
+                database
+                    .getReference()
+                    .child("Group-Chats")
+                    .child(mainRoom)
+                    .child("messages")
+                    .child(randomKey)
+                    .setValue(message)
+                    .addOnSuccessListener(
+                        new OnSuccessListener<Void>() {
 
-                @Override
-                public void onSuccess(Void p1) {
-                    
-                    
-                }
-
-
-            });
-
-
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        recieveMessage();
-    }
-
-    
-    private void sendMessageWithImage(String messageTxt) {
-        final String randomKey=database.getReference().push().getKey();
-
-        Date date=new Date();
-        final Message message=new Message(messageTxt, senderUid,date.getTime());
-        message.setMessage("Photo");
-        message.setImageUrl(filePath);
-
-        messageBox.setText("");
-
-        HashMap<String,Object> lastMessageObj=new HashMap<>();
-        lastMessageObj.put("lastMessage",message.getMessage());
-        lastMessageObj.put("lastMessageTime",Calendar.getInstance().getTimeInMillis());
-        database.getReference().child("Group-Chats").child(mainRoom).child("lstMsg").updateChildren(lastMessageObj);
-        
-
-
-        database.getReference().child("Group-Chats")
-            .child(mainRoom)
-            .child("messages")
-            .child(randomKey)
-            .setValue(message).addOnSuccessListener(new OnSuccessListener<Void>(){
-
-                @Override
-                public void onSuccess(Void p1) {
-                    database.getReference().child("Group-Chats")
-                        .child(mainRoom)
-                        .child("messages")
-                        .child(randomKey)
-                        .setValue(message).addOnSuccessListener(new OnSuccessListener<Void>(){
-
-                            @Override
-                            public void onSuccess(Void p1) {
-
-                            }
-
-
+                          @Override
+                          public void onSuccess(Void p1) {}
                         });
-                }
-
-
+              }
             });
+  }
 
-    }
+  private void dialogAttachment() {
 
+    View v = LayoutInflater.from(this).inflate(R.layout.mydialog_custom_attachment, null, false);
+    final Dialog dialog = new Dialog(GroupChatActivity.this);
+    dialog.setContentView(v);
+    dialog.show();
+    attachDoc = v.findViewById(R.id.attachmentDocuments);
+    attachAudio = v.findViewById(R.id.attachmentAudio);
+    attachGallery = v.findViewById(R.id.attachmentGallery);
+    attachPdfs = v.findViewById(R.id.attachmentPdfs);
+    StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+    StrictMode.setVmPolicy(builder.build());
 
+    attachGallery.setOnClickListener(
+        new View.OnClickListener() {
 
-    private void dialogAttachment(){
+          @Override
+          public void onClick(View view) {
+            dialog.dismiss();
+            Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
+            galleryIntent.setType("image/*");
+            startActivityForResult(galleryIntent, GET_GALLERY);
+          }
+        });
+    attachPdfs.setOnClickListener(
+        new View.OnClickListener() {
 
-        View v=LayoutInflater.from(this).inflate(R.layout.mydialog_custom_attachment,null,false); 
-        final Dialog dialog=new Dialog(GroupChatActivity.this); 
-        dialog.setContentView(v);
-        dialog.show();
-        attachDoc=v.findViewById(R.id.attachmentDocuments);
-        attachAudio=v.findViewById(R.id.attachmentAudio);
-        attachGallery=v.findViewById(R.id.attachmentGallery);
-        attachPdfs=v.findViewById(R.id.attachmentPdfs);
-        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-        StrictMode.setVmPolicy(builder.build());
+          @Override
+          public void onClick(View view) {
+            dialog.dismiss();
+            Intent pdfIntent = new Intent(Intent.ACTION_GET_CONTENT);
+            pdfIntent.setType("application/pdf");
+            startActivityForResult(pdfIntent, GET_PDFS);
+          }
+        });
+  }
 
-        attachGallery.setOnClickListener(new View.OnClickListener() {
+  private void sendMessageWithPdf(String messageTxt) {
+    final String randomKey = database.getReference().push().getKey();
 
-                @Override
-                public void onClick(View view) {
-                    dialog.dismiss();
-                    Intent galleryIntent=new Intent(Intent.ACTION_GET_CONTENT);  
-                    galleryIntent.setType("image/*");
-                    startActivityForResult(galleryIntent,GET_GALLERY);
+    Date date = new Date();
+    final Message message = new Message(messageTxt, senderUid, date.getTime());
+    message.setMessage("Pdf");
+    message.setPdfUrl(pdfFilePath);
+    message.setPdfName(uploadFile.getName());
 
+    HashMap<String, Object> lastMessageObj = new HashMap<>();
+    lastMessageObj.put("lastMessage", message.getMessage());
+    lastMessageObj.put("lastMessageTime", Calendar.getInstance().getTimeInMillis());
+    database
+        .getReference()
+        .child("Group-Chats")
+        .child(mainRoom)
+        .child("lstMsg")
+        .updateChildren(lastMessageObj);
 
-                }
-            }); 
-        attachPdfs.setOnClickListener(new View.OnClickListener() {
+    database
+        .getReference()
+        .child("Group-Chats")
+        .child(mainRoom)
+        .child("messages")
+        .child(randomKey)
+        .setValue(message)
+        .addOnSuccessListener(
+            new OnSuccessListener<Void>() {
 
-                @Override
-                public void onClick(View view) {
-                    dialog.dismiss();
-                    Intent pdfIntent=new Intent(Intent.ACTION_GET_CONTENT);  
-                    pdfIntent.setType("application/pdf");
-                    startActivityForResult(pdfIntent,GET_PDFS);
+              @Override
+              public void onSuccess(Void p1) {
+                database
+                    .getReference()
+                    .child("Group-Chats")
+                    .child(mainRoom)
+                    .child("messages")
+                    .child(randomKey)
+                    .setValue(message)
+                    .addOnSuccessListener(
+                        new OnSuccessListener<Void>() {
 
-
-                }
-            });
-    }
-
-    private void sendMessageWithPdf(String messageTxt) {
-        final String randomKey=database.getReference().push().getKey();
-
-        Date date=new Date();
-        final Message message=new Message(messageTxt, senderUid,date.getTime());
-        message.setMessage("Pdf");
-        message.setPdfUrl(pdfFilePath);
-        message.setPdfName(uploadFile.getName());
-
-
-        HashMap<String,Object> lastMessageObj=new HashMap<>();
-        lastMessageObj.put("lastMessage",message.getMessage());
-        lastMessageObj.put("lastMessageTime",Calendar.getInstance().getTimeInMillis());
-        database.getReference().child("Group-Chats").child(mainRoom).child("lstMsg").updateChildren(lastMessageObj);
-        
-
-
-        database.getReference().child("Group-Chats")
-            .child(mainRoom)
-            .child("messages")
-            .child(randomKey)
-            .setValue(message).addOnSuccessListener(new OnSuccessListener<Void>(){
-
-                @Override
-                public void onSuccess(Void p1) {
-                    database.getReference().child("Group-Chats")
-                        .child(mainRoom)
-                        .child("messages")
-                        .child(randomKey)
-                        .setValue(message).addOnSuccessListener(new OnSuccessListener<Void>(){
-
-                            @Override
-                            public void onSuccess(Void p1) {
-
-                            }
-
-
+                          @Override
+                          public void onSuccess(Void p1) {}
                         });
-                }
-
-
+              }
             });
-
-    }
-    
+  }
 }

@@ -1,80 +1,73 @@
 package com.amol.realapp.chatty.model;
 
 public class Message {
-    
-    private String messageId;
-    private String message,senderId,imageUrl;
-    private long timeStamp;
-    private String pdfName,pdfUrl;
-    public Message(){
 
-    }
-    public Message(String message, String senderId,long timeStamp) {
-        this.message = message;
-        this.senderId = senderId;
-        this.timeStamp = timeStamp;
-       
-       
-        
-    }
+  private String messageId;
+  private String message, senderId, imageUrl;
+  private long timeStamp;
+  private String pdfName, pdfUrl;
 
-    public void setPdfName(String pdfName) {
-        this.pdfName = pdfName;
-    }
+  public Message() {}
 
-    public String getPdfName() {
-        return pdfName;
-    }
-   
-    
+  public Message(String message, String senderId, long timeStamp) {
+    this.message = message;
+    this.senderId = senderId;
+    this.timeStamp = timeStamp;
+  }
 
-    public void setMessageId(String messageId) {
-        this.messageId = messageId;
-    }
+  public void setPdfName(String pdfName) {
+    this.pdfName = pdfName;
+  }
 
-    public String getMessageId() {
-        return messageId;
-    }
+  public String getPdfName() {
+    return pdfName;
+  }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
+  public void setMessageId(String messageId) {
+    this.messageId = messageId;
+  }
 
-    public String getMessage() {
-        return message;
-    }
+  public String getMessageId() {
+    return messageId;
+  }
 
-    public void setSenderId(String senderId) {
-        this.senderId = senderId;
-    }
+  public void setMessage(String message) {
+    this.message = message;
+  }
 
-    public String getSenderId() {
-        return senderId;
-    }
+  public String getMessage() {
+    return message;
+  }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
+  public void setSenderId(String senderId) {
+    this.senderId = senderId;
+  }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
+  public String getSenderId() {
+    return senderId;
+  }
 
-    public void setPdfUrl(String pdfUrl) {
-        this.pdfUrl = pdfUrl;
-    }
+  public void setImageUrl(String imageUrl) {
+    this.imageUrl = imageUrl;
+  }
 
-    public String getPdfUrl() {
-        return pdfUrl;
-    }
+  public String getImageUrl() {
+    return imageUrl;
+  }
 
-    public void setTimeStamp(long timeStamp) {
-        this.timeStamp = timeStamp;
-    }
+  public void setPdfUrl(String pdfUrl) {
+    this.pdfUrl = pdfUrl;
+  }
 
-    public long getTimeStamp() {
-        return timeStamp;
-    }
-    
-    
+  public String getPdfUrl() {
+    return pdfUrl;
+  }
+
+  public void setTimeStamp(long timeStamp) {
+    this.timeStamp = timeStamp;
+  }
+
+  public long getTimeStamp() {
+    return timeStamp;
+  }
 }

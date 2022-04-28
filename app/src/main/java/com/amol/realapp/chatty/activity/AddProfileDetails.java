@@ -2,12 +2,11 @@ package com.amol.realapp.chatty.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import com.amol.realapp.chatty.R;
 import com.amol.realapp.chatty.model.userProfile;
@@ -15,6 +14,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -22,10 +22,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import de.hdodenhof.circleimageview.CircleImageView;
-import android.view.LayoutInflater;
-import androidx.appcompat.app.AlertDialog;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.firebase.FirebaseApp;
+
 public class AddProfileDetails extends AppCompatActivity {
 
     private CircleImageView userProfileImage;
@@ -36,8 +33,7 @@ public class AddProfileDetails extends AppCompatActivity {
     private MaterialButton proceedUserDetails;
     private Uri selectedImage;
     private StorageReference storageReference;
-    private DatabaseReference databaseReference;
-
+    
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {

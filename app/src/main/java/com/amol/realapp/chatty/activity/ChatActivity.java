@@ -1,29 +1,32 @@
 package com.amol.realapp.chatty.activity;
+
+import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.amol.realapp.chatty.R;
-import com.amol.realapp.chatty.activity.ChatActivity;
 import com.amol.realapp.chatty.adapter.messageAdapter;
 import com.amol.realapp.chatty.model.Message;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -31,459 +34,417 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 import de.hdodenhof.circleimageview.CircleImageView;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.text.SimpleDateFormat;
-import android.app.Dialog;
-import com.google.firebase.database.DatabaseReference;
-import android.provider.MediaStore;
-import android.widget.LinearLayout;
-import androidx.core.content.ContextCompat;
-import android.Manifest;
-import android.content.pm.PackageManager;
-import androidx.core.app.ActivityCompat;
-import android.graphics.Bitmap;
-import java.io.File;
-import android.os.Environment;
-import android.os.StrictMode;
-import android.util.Log;
-import android.widget.Toast;
 
 public class ChatActivity extends AppCompatActivity {
-    Toolbar tb;
-    ArrayList<Message> messages;
-    messageAdapter messageAdapter;
-    private String usersName,recieverUid,senderUid;
-    private String senderRoom,recieverRoom;
-    private String filePath,pdfFilePath;
-    private FloatingActionButton sendMessage;
-    private EditText messageBox;
-	
-			
-    private FirebaseDatabase database;
-    private RecyclerView messagesList;
-    private ImageView icEmoji,icAttach,icCam,icBack;
-    private FirebaseStorage storage;
-    private TextView name,statusIndicator;
-    private CircleImageView profileImage;
-    private DatabaseReference messageReference;
-    
-    private LinearLayout attachPdfs,attachDoc,attachAudio,attachGallery;
+  private Toolbar tb;
+  private ArrayList<Message> messages;
+  private messageAdapter messageAdapter;
+  private String usersName, recieverUid, senderUid;
+  private String senderRoom, recieverRoom;
+  private String filePath, pdfFilePath;
+  private FloatingActionButton sendMessage;
+  private EditText messageBox;
 
-    private static final int GET_GALLERY=11;
-    private static final int GET_CAMERA=18;
-    private static final int GET_PDFS=12;
-    
-    private static final int PERMISSION_CAMERA=88;
-    private File pdfFile, uploadFile;
-   
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat);
-        Log.d("ChatActivity.java","OnCreate successful");
-        init();
-        initListener();
-    }
-    private void init() {
-        
-        
-        tb = findViewById(R.id.toolbar);
-        icBack=findViewById(R.id.userBack);
-        profileImage=findViewById(R.id.userProfileImage);
-        name=findViewById(R.id.userProfileName);
-        statusIndicator=findViewById(R.id.online_text_indicator);
-        
-        usersName = getIntent().getStringExtra("userChatsName");
-        recieverUid = getIntent().getStringExtra("userChatsUid");
-        senderUid = FirebaseAuth.getInstance().getUid();
-        
-        
-        messages = new ArrayList<>();
-        messageAdapter = new messageAdapter(ChatActivity.this, messages);
-        senderRoom = senderUid + recieverUid;
-        recieverRoom = recieverUid + senderUid;
+  private FirebaseDatabase database;
+  private RecyclerView messagesList;
+  private ImageView icAttach, icCam, icBack;
+  private FirebaseStorage storage;
+  private TextView name, statusIndicator;
+  private CircleImageView profileImage;
+  private DatabaseReference messageReference;
 
-        messageBox = findViewById(R.id.chatMessage);
-        sendMessage = findViewById(R.id.chatMphone_send);
-        database = FirebaseDatabase.getInstance();
-        storage = FirebaseStorage.getInstance();
-        messagesList = findViewById(R.id.messagesList);
-        messagesList.setLayoutManager(new LinearLayoutManager(ChatActivity.this));
-        messagesList.setAdapter(messageAdapter);
+  private LinearLayout attachPdfs, attachDoc, attachAudio, attachGallery;
 
-        icAttach = findViewById(R.id.chatAttachment);
-        icCam=findViewById(R.id.chatCam);
-    }
-    private void initListener() {
-          setSupportActionBar(tb);
-        String txt_name=getIntent().getStringExtra("userChatsName");
-        String txt_profile=getIntent().getStringExtra("userChatsProfile");
-        
-        name.setText(txt_name);
-        Picasso.get().load(txt_profile).placeholder(R.drawable.ic_profile).into(profileImage);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        icBack.setOnClickListener(new View.OnClickListener() {
+  private static final int GET_GALLERY = 11;
+  private static final int GET_PDFS = 12;
 
-                        @Override
-                        public void onClick(View view) {
-                        finish();
+  private File uploadFile;
+
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_chat);
+    Log.d("ChatActivity.java", "OnCreate successful");
+    init();
+    initListener();
+  }
+
+  private void init() {
+
+    tb = findViewById(R.id.toolbar);
+    icBack = findViewById(R.id.userBack);
+    profileImage = findViewById(R.id.userProfileImage);
+    name = findViewById(R.id.userProfileName);
+    statusIndicator = findViewById(R.id.online_text_indicator);
+
+    usersName = getIntent().getStringExtra("userChatsName");
+    recieverUid = getIntent().getStringExtra("userChatsUid");
+    senderUid = FirebaseAuth.getInstance().getUid();
+
+    messages = new ArrayList<>();
+    messageAdapter = new messageAdapter(ChatActivity.this, messages);
+    senderRoom = senderUid + recieverUid;
+    recieverRoom = recieverUid + senderUid;
+
+    messageBox = findViewById(R.id.chatMessage);
+    sendMessage = findViewById(R.id.chatMphone_send);
+    database = FirebaseDatabase.getInstance();
+    storage = FirebaseStorage.getInstance();
+    messagesList = findViewById(R.id.messagesList);
+    messagesList.setLayoutManager(new LinearLayoutManager(ChatActivity.this));
+    messagesList.setAdapter(messageAdapter);
+
+    icAttach = findViewById(R.id.chatAttachment);
+    icCam = findViewById(R.id.chatCam);
+  }
+
+  private void initListener() {
+    setSupportActionBar(tb);
+    String txt_name = getIntent().getStringExtra("userChatsName");
+    String txt_profile = getIntent().getStringExtra("userChatsProfile");
+
+    name.setText(txt_name);
+    Picasso.get().load(txt_profile).placeholder(R.drawable.ic_profile).into(profileImage);
+    getSupportActionBar().setDisplayShowTitleEnabled(false);
+    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+    icBack.setOnClickListener(
+        new View.OnClickListener() {
+
+          @Override
+          public void onClick(View view) {
+            finish();
+          }
+        });
+
+    sendMessage.setOnClickListener(
+        new View.OnClickListener() {
+
+          @Override
+          public void onClick(View view) {
+            String messageTxt = messageBox.getText().toString();
+            if (messageTxt.isEmpty()) {
+
+            } else {
+              sendMessage(messageTxt);
+            }
+          }
+        });
+    icAttach.setOnClickListener(
+        new View.OnClickListener() {
+
+          @Override
+          public void onClick(View view) {
+            dialogAttachment();
+          }
+        });
+    icCam.setOnClickListener(
+        new View.OnClickListener() {
+
+          @Override
+          public void onClick(View view) {}
+        });
+  }
+
+  private void recieveMessage() {
+    // Recieve Messsages
+
+    messageReference = database.getReference().child("chats").child(senderRoom).child("messages");
+    messageReference.keepSynced(true);
+    messageReference.addValueEventListener(
+        new ValueEventListener() {
+
+          @Override
+          public void onDataChange(DataSnapshot p1) {
+            messages.clear();
+            for (DataSnapshot snapshot1 : p1.getChildren()) {
+              Message message = snapshot1.getValue(Message.class);
+              messages.add(message);
+              messagesList.smoothScrollToPosition(messageAdapter.getItemCount());
+            }
+            messageAdapter.notifyDataSetChanged();
+          }
+
+          @Override
+          public void onCancelled(DatabaseError p1) {}
+        });
+  }
+
+  private void sendMessage(String messageTxt) {
+
+    final String randomKey = database.getReference().push().getKey();
+
+    Date date = new Date();
+    final Message message = new Message(messageTxt, senderUid, date.getTime());
+
+    messageBox.setText("");
+
+    HashMap<String, Object> lastMessageObj = new HashMap<>();
+    lastMessageObj.put("lastMessage", message.getMessage());
+    lastMessageObj.put("lastMessageTime", Calendar.getInstance().getTimeInMillis());
+    database.getReference().child("chats").child(senderRoom).updateChildren(lastMessageObj);
+    database.getReference().child("chats").child(recieverRoom).updateChildren(lastMessageObj);
+
+    database
+        .getReference()
+        .child("chats")
+        .child(senderRoom)
+        .child("messages")
+        .child(randomKey)
+        .setValue(message)
+        .addOnSuccessListener(
+            new OnSuccessListener<Void>() {
+
+              @Override
+              public void onSuccess(Void p1) {
+                database
+                    .getReference()
+                    .child("chats")
+                    .child(recieverRoom)
+                    .child("messages")
+                    .child(randomKey)
+                    .setValue(message)
+                    .addOnSuccessListener(
+                        new OnSuccessListener<Void>() {
+
+                          @Override
+                          public void onSuccess(Void p1) {}
+                        });
+              }
+            });
+  }
+
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    switch (requestCode) {
+      case GET_GALLERY:
+        if (data != null) {
+          if (data.getData() != null) {
+            Uri selectedImage = data.getData();
+            Calendar cal = Calendar.getInstance();
+
+            final StorageReference strRef =
+                storage.getReference().child("chats").child(cal.getTimeInMillis() + "");
+            View v =
+                LayoutInflater.from(ChatActivity.this)
+                    .inflate(R.layout.dialog_attachment, null, false);
+            final Dialog mDialog = new Dialog(ChatActivity.this);
+            mDialog.setContentView(v);
+            mDialog.setCancelable(false);
+
+            strRef
+                .putFile(selectedImage)
+                .addOnCompleteListener(
+                    new OnCompleteListener<UploadTask.TaskSnapshot>() {
+
+                      @Override
+                      public void onComplete(Task<UploadTask.TaskSnapshot> p1) {
+                        if (p1.isSuccessful()) {
+                          strRef
+                              .getDownloadUrl()
+                              .addOnSuccessListener(
+                                  new OnSuccessListener<Uri>() {
+
+                                    @Override
+                                    public void onSuccess(Uri p1) {
+                                      filePath = p1.toString();
+                                      mDialog.dismiss();
+                                      String messageTxt = messageBox.getText().toString();
+                                      sendMessageWithImage(messageTxt);
+                                    }
+                                  });
                         }
-                        });
-        
-        sendMessage.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View view) {
-                    String messageTxt=messageBox.getText().toString();
-                    if (messageTxt.isEmpty()) {
-
-                    } else {
-                        sendMessage(messageTxt);
-                    }
-                    
-                    
-                }
-
-                
-            });
-        icAttach.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View view) {
-                    dialogAttachment();
-                                   }
-            });   
-        icCam.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View view) {
-                
-                }
-            });
-    }
-    private void recieveMessage() {
-        //Recieve Messsages
-        
-        messageReference=database.getReference().child("chats").child(senderRoom).child("messages");
-            messageReference.keepSynced(true);
-        messageReference
-            .addValueEventListener(new ValueEventListener(){
-
-                @Override
-                public void onDataChange(DataSnapshot p1) {
-                    messages.clear();
-                    for (DataSnapshot snapshot1:p1.getChildren()) {
-                        Message message=snapshot1.getValue(Message.class);   
-                        messages.add(message);
-                        messagesList.smoothScrollToPosition(messageAdapter.getItemCount());
-
-                        
-                    }
-                    messageAdapter.notifyDataSetChanged();
-                    
-                }
-
-                @Override
-                public void onCancelled(DatabaseError p1) {
-                }
-
-
-            });
-    }
-
-
-
-    private void sendMessage(String messageTxt) {
-        
-        final String randomKey=database.getReference().push().getKey();
-        
-        Date date=new Date();
-        final Message message=new Message(messageTxt, senderUid,date.getTime());
-        
-        messageBox.setText("");
-        
-        HashMap<String,Object> lastMessageObj=new HashMap<>();
-        lastMessageObj.put("lastMessage",message.getMessage());
-        lastMessageObj.put("lastMessageTime",Calendar.getInstance().getTimeInMillis());
-        database.getReference().child("chats").child(senderRoom).updateChildren(lastMessageObj);
-        database.getReference().child("chats").child(recieverRoom).updateChildren(lastMessageObj);
-        
-        database.getReference().child("chats")
-            .child(senderRoom)
-            .child("messages")
-            .child(randomKey)
-            .setValue(message).addOnSuccessListener(new OnSuccessListener<Void>(){
-
-                @Override
-                public void onSuccess(Void p1) {
-                    database.getReference().child("chats")
-                        .child(recieverRoom)
-                        .child("messages")
-                        .child(randomKey)
-                        .setValue(message).addOnSuccessListener(new OnSuccessListener<Void>(){
-
-                            @Override
-                            public void onSuccess(Void p1) {
-
-                            }
-
-
-                        });
-                }
-
-
-            });
-            
-        
-    }
-    
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch(requestCode){
-        case GET_GALLERY:
-        
-                if (data != null) {
-                    if (data.getData() != null) {
-                        Uri selectedImage=data.getData();
-                        Calendar cal=Calendar.getInstance();
-
-                        final StorageReference strRef=storage.getReference().child("chats").child(cal.getTimeInMillis() + "");
-                        View v=LayoutInflater.from(ChatActivity.this).inflate(R.layout.dialog_attachment,null,false);
-                        final Dialog mDialog=new Dialog(ChatActivity.this);
-                        mDialog.setContentView(v);
-                        mDialog.setCancelable(false);
-
-                        
-
-                        strRef.putFile(selectedImage).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>(){
-
-                                @Override
-                                public void onComplete(Task<UploadTask.TaskSnapshot> p1) {
-                                    if(p1.isSuccessful()){
-                                        strRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>(){
-
-                                                @Override
-                                                public void onSuccess(Uri p1) {
-                                                    filePath=p1.toString();
-                                                    mDialog.dismiss();
-                                                    String messageTxt=messageBox.getText().toString();
-                                                    sendMessageWithImage(messageTxt);
-                                                    
-                                                }
-
-
-                                            });
-                                    }
-                                }
-
-
-                            });
-                        mDialog.show();
-                    }
-                } 
-                
-                
-           break;
-         
-           case GET_PDFS:
-               
-                if (data != null) {
-                   
-                    if (data.getData() != null) {
-                        Uri selectedPdf=data.getData();
-                         uploadFile=new File(selectedPdf.getPath());
-                        Calendar cal=Calendar.getInstance();
-                            final StorageReference strRef=storage.getReference().child("chats").child(uploadFile.getName());
-                        View v=LayoutInflater.from(ChatActivity.this).inflate(R.layout.dialog_attachment,null,false);
-                        final Dialog mDialog=new Dialog(ChatActivity.this);
-                        mDialog.setContentView(v);
-                        mDialog.setCancelable(false);
-
-                        strRef.putFile(selectedPdf).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>(){
-
-                                @Override
-                                public void onComplete(Task<UploadTask.TaskSnapshot> p1) {
-                                    if(p1.isSuccessful()){
-                                        strRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>(){
-
-                                                @Override
-                                                public void onSuccess(Uri p1) {
-                                                    pdfFilePath=p1.toString();
-                                                    
-                                                    mDialog.dismiss();
-                                                    String messageTxt=messageBox.getText().toString();
-                                                    sendMessageWithPdf(messageTxt);
-                                                    
-                                                }
-
-
-                                            });
-                                    }
-                                }
-
-
-                            });
-                        mDialog.show();
-
-                        
-                        
-                     }
-                }
-               
-               break;
-            
+                      }
+                    });
+            mDialog.show();
+          }
         }
-     
-       
+
+        break;
+
+      case GET_PDFS:
+        if (data != null) {
+
+          if (data.getData() != null) {
+            Uri selectedPdf = data.getData();
+            uploadFile = new File(selectedPdf.getPath());
+            Calendar cal = Calendar.getInstance();
+            final StorageReference strRef =
+                storage.getReference().child("chats").child(uploadFile.getName());
+            View v =
+                LayoutInflater.from(ChatActivity.this)
+                    .inflate(R.layout.dialog_attachment, null, false);
+            final Dialog mDialog = new Dialog(ChatActivity.this);
+            mDialog.setContentView(v);
+            mDialog.setCancelable(false);
+
+            strRef
+                .putFile(selectedPdf)
+                .addOnCompleteListener(
+                    new OnCompleteListener<UploadTask.TaskSnapshot>() {
+
+                      @Override
+                      public void onComplete(Task<UploadTask.TaskSnapshot> p1) {
+                        if (p1.isSuccessful()) {
+                          strRef
+                              .getDownloadUrl()
+                              .addOnSuccessListener(
+                                  new OnSuccessListener<Uri>() {
+
+                                    @Override
+                                    public void onSuccess(Uri p1) {
+                                      pdfFilePath = p1.toString();
+
+                                      mDialog.dismiss();
+                                      String messageTxt = messageBox.getText().toString();
+                                      sendMessageWithPdf(messageTxt);
+                                    }
+                                  });
+                        }
+                      }
+                    });
+            mDialog.show();
+          }
+        }
+
+        break;
     }
-    
-    
-    private void sendMessageWithImage(String messageTxt) {
-        final String randomKey=database.getReference().push().getKey();
-         
-        Date date=new Date();
-         final Message message=new Message(messageTxt, senderUid,date.getTime());
-        message.setMessage("Photo");
-        message.setImageUrl(filePath);
-        
-        messageBox.setText("");
-        
-           HashMap<String,Object> lastMessageObj=new HashMap<>();
-        lastMessageObj.put("lastMessage",message.getMessage());
-        lastMessageObj.put("lastMessageTime",Calendar.getInstance().getTimeInMillis());
-        database.getReference().child("chats").child(senderRoom).updateChildren(lastMessageObj);
-        database.getReference().child("chats").child(recieverRoom).updateChildren(lastMessageObj);
-        
-   
-        
-        database.getReference().child("chats")
-            .child(senderRoom)
-            .child("messages")
-            .child(randomKey)
-            .setValue(message).addOnSuccessListener(new OnSuccessListener<Void>(){
+  }
 
-                @Override
-                public void onSuccess(Void p1) {
-                    database.getReference().child("chats")
-                        .child(recieverRoom)
-                        .child("messages")
-                        .child(randomKey)
-                        .setValue(message).addOnSuccessListener(new OnSuccessListener<Void>(){
+  private void sendMessageWithImage(String messageTxt) {
+    final String randomKey = database.getReference().push().getKey();
 
-                            @Override
-                            public void onSuccess(Void p1) {
+    Date date = new Date();
+    final Message message = new Message(messageTxt, senderUid, date.getTime());
+    message.setMessage("Photo");
+    message.setImageUrl(filePath);
 
-                            }
+    messageBox.setText("");
 
+    HashMap<String, Object> lastMessageObj = new HashMap<>();
+    lastMessageObj.put("lastMessage", message.getMessage());
+    lastMessageObj.put("lastMessageTime", Calendar.getInstance().getTimeInMillis());
+    database.getReference().child("chats").child(senderRoom).updateChildren(lastMessageObj);
+    database.getReference().child("chats").child(recieverRoom).updateChildren(lastMessageObj);
 
+    database
+        .getReference()
+        .child("chats")
+        .child(senderRoom)
+        .child("messages")
+        .child(randomKey)
+        .setValue(message)
+        .addOnSuccessListener(
+            new OnSuccessListener<Void>() {
+
+              @Override
+              public void onSuccess(Void p1) {
+                database
+                    .getReference()
+                    .child("chats")
+                    .child(recieverRoom)
+                    .child("messages")
+                    .child(randomKey)
+                    .setValue(message)
+                    .addOnSuccessListener(
+                        new OnSuccessListener<Void>() {
+
+                          @Override
+                          public void onSuccess(Void p1) {}
                         });
-                }
-
-
+              }
             });
-    
-    }
-    
-    
-    
-    private void dialogAttachment(){
+  }
 
-        View v=LayoutInflater.from(this).inflate(R.layout.mydialog_custom_attachment,null,false); 
-        final Dialog dialog=new Dialog(ChatActivity.this); 
-        dialog.setContentView(v);
-        dialog.show();
-        attachDoc=v.findViewById(R.id.attachmentDocuments);
-        attachAudio=v.findViewById(R.id.attachmentAudio);
-        attachGallery=v.findViewById(R.id.attachmentGallery);
-        attachPdfs=v.findViewById(R.id.attachmentPdfs);
-        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-        StrictMode.setVmPolicy(builder.build());
+  private void dialogAttachment() {
 
-        attachGallery.setOnClickListener(new View.OnClickListener() {
+    View v = LayoutInflater.from(this).inflate(R.layout.mydialog_custom_attachment, null, false);
+    final Dialog dialog = new Dialog(ChatActivity.this);
+    dialog.setContentView(v);
+    dialog.show();
+    attachDoc = v.findViewById(R.id.attachmentDocuments);
+    attachAudio = v.findViewById(R.id.attachmentAudio);
+    attachGallery = v.findViewById(R.id.attachmentGallery);
+    attachPdfs = v.findViewById(R.id.attachmentPdfs);
+    StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+    StrictMode.setVmPolicy(builder.build());
 
-                @Override
-                public void onClick(View view) {
-                    dialog.dismiss();
-                    Intent galleryIntent=new Intent(Intent.ACTION_GET_CONTENT);  
-                    galleryIntent.setType("image/*");
-                    startActivityForResult(galleryIntent,GET_GALLERY);
+    attachGallery.setOnClickListener(
+        new View.OnClickListener() {
 
+          @Override
+          public void onClick(View view) {
+            dialog.dismiss();
+            Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
+            galleryIntent.setType("image/*");
+            startActivityForResult(galleryIntent, GET_GALLERY);
+          }
+        });
+    attachPdfs.setOnClickListener(
+        new View.OnClickListener() {
 
-                }
-            }); 
-        attachPdfs.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View view) {
+            dialog.dismiss();
+            Intent pdfIntent = new Intent(Intent.ACTION_GET_CONTENT);
+            pdfIntent.setType("application/pdf");
+            startActivityForResult(pdfIntent, GET_PDFS);
+          }
+        });
+  }
 
-                @Override
-                public void onClick(View view) {
-                    dialog.dismiss();
-                    Intent pdfIntent=new Intent(Intent.ACTION_GET_CONTENT);  
-                    pdfIntent.setType("application/pdf");
-                    startActivityForResult(pdfIntent,GET_PDFS);
+  private void sendMessageWithPdf(String messageTxt) {
+    final String randomKey = database.getReference().push().getKey();
 
+    Date date = new Date();
+    final Message message = new Message(messageTxt, senderUid, date.getTime());
+    message.setMessage("Pdf");
+    message.setPdfUrl(pdfFilePath);
+    message.setPdfName(uploadFile.getName());
 
-                }
-            });
-    }
-    
-    private void sendMessageWithPdf(String messageTxt) {
-        final String randomKey=database.getReference().push().getKey();
+    HashMap<String, Object> lastMessageObj = new HashMap<>();
+    lastMessageObj.put("lastMessage", message.getMessage());
+    lastMessageObj.put("lastMessageTime", Calendar.getInstance().getTimeInMillis());
+    database.getReference().child("chats").child(senderRoom).updateChildren(lastMessageObj);
+    database.getReference().child("chats").child(recieverRoom).updateChildren(lastMessageObj);
 
-        Date date=new Date();
-        final Message message=new Message(messageTxt, senderUid,date.getTime());
-        message.setMessage("Pdf");
-        message.setPdfUrl(pdfFilePath);
-       message.setPdfName(uploadFile.getName());
-        
+    database
+        .getReference()
+        .child("chats")
+        .child(senderRoom)
+        .child("messages")
+        .child(randomKey)
+        .setValue(message)
+        .addOnSuccessListener(
+            new OnSuccessListener<Void>() {
 
-        HashMap<String,Object> lastMessageObj=new HashMap<>();
-        lastMessageObj.put("lastMessage",message.getMessage());
-        lastMessageObj.put("lastMessageTime",Calendar.getInstance().getTimeInMillis());
-        database.getReference().child("chats").child(senderRoom).updateChildren(lastMessageObj);
-        database.getReference().child("chats").child(recieverRoom).updateChildren(lastMessageObj);
+              @Override
+              public void onSuccess(Void p1) {
+                database
+                    .getReference()
+                    .child("chats")
+                    .child(recieverRoom)
+                    .child("messages")
+                    .child(randomKey)
+                    .setValue(message)
+                    .addOnSuccessListener(
+                        new OnSuccessListener<Void>() {
 
-
-
-        database.getReference().child("chats")
-            .child(senderRoom)
-            .child("messages")
-            .child(randomKey)
-            .setValue(message).addOnSuccessListener(new OnSuccessListener<Void>(){
-
-                @Override
-                public void onSuccess(Void p1) {
-                    database.getReference().child("chats")
-                        .child(recieverRoom)
-                        .child("messages")
-                        .child(randomKey)
-                        .setValue(message).addOnSuccessListener(new OnSuccessListener<Void>(){
-
-                            @Override
-                            public void onSuccess(Void p1) {
-
-                            }
-
-
+                          @Override
+                          public void onSuccess(Void p1) {}
                         });
-                }
-
-
+              }
             });
+  }
 
-    }
-    
-    
-    @Override
-    protected void onStart() {
-        super.onStart();
-        recieveMessage();
-        
-    }
-
-    
+  @Override
+  protected void onStart() {
+    super.onStart();
+    recieveMessage();
+  }
 }

@@ -1,23 +1,19 @@
 package com.amol.realapp.chatty.adapter;
 
-import com.amol.realapp.chatty.R;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.recyclerview.widget.RecyclerView;
+import com.amol.realapp.chatty.R;
 import com.amol.realapp.chatty.activity.MainActivity;
+import com.amol.realapp.chatty.model.Status;
 import com.amol.realapp.chatty.model.userStatus;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.devlomi.circularstatusview.CircularStatusView;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.NetworkPolicy;
-import com.squareup.picasso.Picasso;
 import de.hdodenhof.circleimageview.CircleImageView;
 import java.util.ArrayList;
-import android.content.Intent;
-import com.amol.realapp.chatty.model.Status;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.Glide;
 import omari.hamza.storyview.StoryView;
 import omari.hamza.storyview.callback.StoryClickListeners;
 import omari.hamza.storyview.model.MyStory;
@@ -77,18 +73,18 @@ public class TopStatusAdapter extends RecyclerView.Adapter<TopStatusAdapter.TopS
 
                   @Override
                   public void onDescriptionClickListener(int arg) {
-                      // TODO your action
-                      
+                    // TODO your action
+
                   }
 
                   @Override
                   public void onTitleIconClickListener(int arg0) {
-                      // TODO your action
-                      
+                    // TODO your action
+
                   }
                 });
-                builder.build();
-                builder.show();
+            builder.build();
+            builder.show();
           }
         });
   }
@@ -109,4 +105,3 @@ public class TopStatusAdapter extends RecyclerView.Adapter<TopStatusAdapter.TopS
     }
   }
 }
-
