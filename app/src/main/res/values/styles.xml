@@ -19,13 +19,13 @@
        
    
        <style name="TextAppearance.App.Headline6" parent="TextAppearance.MaterialComponents.Headline6">
-        <item name="fontFamily">@font/rubik</item>
-        <item name="android:fontFamily">@font/rubik</item>
+        <item name="fontFamily">@font/josefin_sans_regu</item>
+        <item name="android:fontFamily">@font/josefin_sans_regu</item>
 
     </style>
     <style name="TextAppearance.App.Subtitle1" parent="TextAppearance.MaterialComponents.Subtitle1">
-        <item name="fontFamily">@font/rubik</item>
-        <item name="android:fontFamily">@font/rubik</item>
+        <item name="fontFamily">@font/josefin_sans_light</item>
+        <item name="android:fontFamily">@font/josefin_sans_light</item>
         
     </style>
     <style name="Widget.App.CardView" parent="Widget.MaterialComponents.CardView">
