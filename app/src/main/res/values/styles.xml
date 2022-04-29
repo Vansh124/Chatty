@@ -1,46 +1,47 @@
-<resources
-    xmlns:tools="http://schemas.android.com/tools"
-    >
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.Material3.Light.NoActionBar">
+
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/light_blue_500</item>
         <item name="colorPrimaryVariant">@color/light_blueA700</item>
         <item name="colorOnPrimary">@color/toolbar_color_dark</item>
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <item name="android:windowLightStatusBar"
-            tools:targetApi="m" >true</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
         <item name="textAppearanceHeadline6">@style/TextAppearance.App.Headline6</item>
         <item name="textAppearanceSubtitle1">@style/TextAppearance.App.Subtitle1</item>
         <item name="materialCardViewStyle">@style/Widget.App.CardView</item>
-          </style>
-    <style name="AppTheme.AppBarOverlay"   parent="ThemeOverlay.MaterialComponents.ActionBar"/>
-    <style name="AppTheme.PopupOverlay"    parent="ThemeOverlay.MaterialComponents.Light"/>
-       
-   
-       <style name="TextAppearance.App.Headline6" parent="TextAppearance.MaterialComponents.Headline6">
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
+
+    <style name="TextAppearance.App.Headline6" parent="TextAppearance.MaterialComponents.Headline6">
         <item name="fontFamily">@font/josefin_sans_regu</item>
         <item name="android:fontFamily">@font/josefin_sans_regu</item>
-
     </style>
+
     <style name="TextAppearance.App.Subtitle1" parent="TextAppearance.MaterialComponents.Subtitle1">
         <item name="fontFamily">@font/josefin_sans_light</item>
         <item name="android:fontFamily">@font/josefin_sans_light</item>
-        
     </style>
+
     <style name="Widget.App.CardView" parent="Widget.MaterialComponents.CardView">
         <item name="materialThemeOverlay">@style/ThemeOverlay.App.Card</item>
-            </style>
-     <style name="ThemeOverlay.App.Card" parent="">
+    </style>
+
+    <style name="ThemeOverlay.App.Card" parent="">
         <item name="colorPrimary">@color/light_blue_500</item>
         <item name="colorSurface">@color/purple_a400</item>
         <item name="colorOnSurface">@color/light_blueA700</item>
-        
     </style>
+
     <style name="ShapeAppearanceOverlay.App.Card.Media" parent="">
         <item name="cornerSizeBottomLeft">0dp</item>
         <item name="cornerSizeTopLeft">0dp</item>
     </style>
+
 </resources>
-
-
