@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
             android:background="?colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay">
+            >
             <include layout="@layout/toolbar_custom_group_chat_layout"/>
         </androidx.appcompat.widget.Toolbar>
 

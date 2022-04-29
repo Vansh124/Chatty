@@ -17,8 +17,9 @@
             android:layout_height="?actionBarSize"
             android:background="?colorPrimary"
             android:elevation="4dp"
+            android:fontFamily="@font/josefin_sans_regu"
             android:titleTextColor="@color/toolbar_color_dark"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            />
     </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
