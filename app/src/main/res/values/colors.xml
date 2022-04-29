@@ -2,7 +2,7 @@
 <resources>
     
     <color name="purple_a100">#EA80FC</color>
-    <color name="purple_300">#BA68C8</color>
+    <color name="light_blue_600">#039BE5</color>
     <color name="purple_a700">#AA00FF</color>
     <color name="purple_a400">#D500F9</color>
     <color name="toolbar_color_dark">#212121</color>
