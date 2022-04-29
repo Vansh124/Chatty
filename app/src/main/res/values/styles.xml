@@ -14,7 +14,7 @@
         <item name="toolbarStyle">@style/AppToolbarStyle</item>
     </style>
 
-    <style name="AppToolbarStyle">
+    <style name="AppToolbarStyle" parent="Widget.Material3.Toolbar">
         <item name="materialThemeOverlay">@style/AppToolbarMatTheme</item>
         <item name="titleTextAppearance">@style/TextAppearance.App.LargeTitle</item>
         <item name="subtitleTextAppearance">@style/TextAppearance.App.MediumSubtitle</item>
@@ -26,9 +26,9 @@
     </style>
 
     <style name="TextAppearance.App.LargeTitle" parent="TextAppearance.Material3.TitleLarge">
-        <item name="fontFamily">@font/josefin_sans_regu</item>
-        <item name="android:fontFamily">@font/josefin_sans_regu</item>
-        <item name="android:textSize">25sp</item>
+        <item name="fontFamily">@font/josefin_sans_bold</item>
+        <item name="android:fontFamily">@font/josefin_sans_bold</item>
+        <item name="android:textSize">30sp</item>
     </style>
 
     <style name="TextAppearance.App.MediumSubtitle" parent="TextAppearance.Material3.TitleMedium">
