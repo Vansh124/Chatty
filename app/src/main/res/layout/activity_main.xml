@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="4dp"
-        android:theme="@style/AppTheme.AppBarOverlay" >
+        >
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
@@ -43,8 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:elevation="8dp"
-            app:itemIconTint="@color/toolbar_color_dark"
-            app:itemTextColor="@color/toolbar_color_dark"
+            style="@style/bottom_nav_menuStyle"
             app:menu="@menu/main_bottom_nav_menu" />
     </LinearLayout>
 
