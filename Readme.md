@@ -1,7 +1,8 @@
 # Chatty
 
-****It is an android app which focuses on the interaction of users by sending messages..
-..
+
+**It is an android app which focuses on the interaction of users by sending messages..**
+
 
 # Features
 
