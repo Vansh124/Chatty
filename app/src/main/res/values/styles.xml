@@ -10,23 +10,30 @@
         <item name="colorOnPrimary">@color/toolbar_color_dark</item>
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
-        <item name="textAppearanceHeadline6">@style/TextAppearance.App.Headline6</item>
-        <item name="textAppearanceSubtitle1">@style/TextAppearance.App.Subtitle1</item>
         <item name="materialCardViewStyle">@style/Widget.App.CardView</item>
+        <item name="toolbarStyle">@style/AppToolbarStyle</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.ActionBar" />
+    <style name="AppToolbarStyle">
+        <item name="materialThemeOverlay">@style/AppToolbarMatTheme</item>
+        <item name="titleTextAppearance">@style/TextAppearance.App.LargeTitle</item>
+        <item name="subtitleTextAppearance">@style/TextAppearance.App.MediumSubtitle</item>
+    </style>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
+    <style name="AppToolbarMatTheme" parent="">
+        <item name="colorSurface">#ff0000</item>
+        <item name="colorOnSurface">#00ff00</item>
+    </style>
 
-    <style name="TextAppearance.App.Headline6" parent="TextAppearance.MaterialComponents.Headline6">
+    <style name="TextAppearance.App.LargeTitle" parent="TextAppearance.Material3.TitleLarge">
         <item name="fontFamily">@font/josefin_sans_regu</item>
         <item name="android:fontFamily">@font/josefin_sans_regu</item>
+        <item name="android:textSize">25sp</item>
     </style>
 
-    <style name="TextAppearance.App.Subtitle1" parent="TextAppearance.MaterialComponents.Subtitle1">
-        <item name="fontFamily">@font/josefin_sans_light</item>
-        <item name="android:fontFamily">@font/josefin_sans_light</item>
+    <style name="TextAppearance.App.MediumSubtitle" parent="TextAppearance.Material3.TitleMedium">
+        <item name="fontFamily">@font/josefin_sans_regu</item>
+        <item name="android:fontFamily">@font/josefin_sans_regu</item>
     </style>
 
     <style name="Widget.App.CardView" parent="Widget.MaterialComponents.CardView">
