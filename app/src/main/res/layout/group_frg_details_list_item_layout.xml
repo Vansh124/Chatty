@@ -51,7 +51,7 @@
                 android:layout_marginTop="0dp"
                 android:padding="5dp"
                 android:text="Tap To chat"
-                android:textAppearance="?attr/TextAppearance.Mssg.MediumSubtitle"
+                android:textAppearance="@style/TextAppearance.Mssg.MediumSubtitle"
                 android:textColor="@color/light_blue_900"
                  />
 
