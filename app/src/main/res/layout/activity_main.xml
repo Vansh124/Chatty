@@ -44,7 +44,10 @@
             android:layout_gravity="bottom"
             android:elevation="8dp"
             style="@style/bottom_nav_menuStyle"
-            app:menu="@menu/main_bottom_nav_menu" />
+            app:menu="@menu/main_bottom_nav_menu"
+            app:itemActiveIndicatorStyle="@style/BottomNavActiveIndicator.Style"
+            
+             />
     </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
