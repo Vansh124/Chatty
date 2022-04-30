@@ -12,11 +12,7 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"/>
 
-	<View
-		android:layout_height="1dp"
-		android:layout_width="match_parent"
-		android:background="#FF5C5C5C"/>
-
+	
 	<androidx.recyclerview.widget.RecyclerView
 		android:id="@+id/chatsList"
 		android:layout_width="match_parent"

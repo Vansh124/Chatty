@@ -4,7 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-	android:layout_height="wrap_content">
+	android:layout_height="wrap_content"
+    android:layout_margin="1dp"
+    >
 
 	<de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/circle_image_view"
@@ -17,7 +19,7 @@
 		android:layout_height="70dp"
 		android:layout_width="70dp"
 		android:id="@+id/circular_status_view"
-        app:portion_color="@color/purple_a100"
+        app:portion_color="@color/light_blue_500"
         app:portion_spacing="4dp"
         app:portion_width="4dp"
         app:portions_count="8"

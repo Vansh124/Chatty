@@ -48,8 +48,7 @@ public class MainActivity extends AppCompatActivity {
   }
 
   private void listener() {
-
-    btmNavView.setOnNavigationItemSelectedListener(
+    btmNavView.setOnItemSelectedListener(
         new BottomNavigationView.OnNavigationItemSelectedListener() {
 
           @Override

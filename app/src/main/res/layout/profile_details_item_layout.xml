@@ -57,7 +57,7 @@
 			android:layout_weight="1.0"
 			android:padding="15dp"
 			android:id="@+id/userProceedDetails"
-			android:backgroundTint="#FF24C54C"
+			android:backgroundTint="@color/light_blue_500"
 			android:textStyle="bold"
 			android:textColor="#FFFFFFFF"
 			android:typeface="serif"
