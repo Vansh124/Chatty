@@ -80,7 +80,12 @@
         <item name="colorOnSurface">@color/black</item>
     </style>
 
-    
+    <style name="ShapeAppearanceOverlay.App.Card.Media" parent="">
+    	<item name="cornerFamily">rounded</item>
+        <item name="cornerSizeBottomLeft">12dp</item>
+        <item name="cornerSizeTopLeft">12dp</item>
+    </style>
+
     <style name="bottom_nav_menuStyle" parent="">
         <item name="backgroundTint">@color/light_blue_700</item>
         <item name="itemTextAppearanceInactive">@style/TextAppearance.BottomNav.SmallTitle</item>
