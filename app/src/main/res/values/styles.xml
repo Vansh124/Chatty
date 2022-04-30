@@ -5,9 +5,10 @@
     <style name="AppTheme" parent="Theme.Material3.Light.NoActionBar">
 
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/light_blue_500</item>
-        <item name="colorPrimaryVariant">@color/light_blueA700</item>
-        <item name="colorOnPrimary">@color/toolbar_color_dark</item>
+        <item name="colorPrimary">@color/light_blue_700</item>
+        <item name="colorPrimaryVariant">@color/light_blue_800</item>
+        <item name="colorOnPrimary">@color/dark_blue</item>
+        <item name="colorSecondaryContainer">@color/light_blue_900</item>
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
         <item name="materialCardViewStyle">@style/Widget.App.CardView</item>
@@ -21,8 +22,11 @@
     </style>
 
     <style name="AppToolbarMatTheme" parent="">
-        <item name="colorSurface">#ff0000</item>
-        <item name="colorOnSurface">#00ff00</item>
+        <item name="colorSurface">@color/light_blue_500</item>
+        <item name="colorOnSurface">@color/dark_blue</item>
+        <item name="fontFamily">@font/josefin_sans_bold</item>
+        <item name="android:fontFamily">@font/josefin_sans_bold</item>
+        <item name="android:textSize">20sp</item>
     </style>
 
     <style name="TextAppearance.App.LargeTitle" parent="TextAppearance.Material3.TitleLarge">
@@ -32,23 +36,60 @@
     </style>
 
     <style name="TextAppearance.App.MediumSubtitle" parent="TextAppearance.Material3.TitleMedium">
-        <item name="fontFamily">@font/josefin_sans_regu</item>
-        <item name="android:fontFamily">@font/josefin_sans_regu</item>
+        <item name="fontFamily">@font/josefin_sans_bold</item>
+        <item name="android:fontFamily">@font/josefin_sans_bold</item>
     </style>
 
-    <style name="Widget.App.CardView" parent="Widget.MaterialComponents.CardView">
+    <style name="TextAppearance.BottomNav.LargeTitle" parent="TextAppearance.Material3.TitleLarge">
+        <item name="fontFamily">@font/josefin_sans_bold</item>
+        <item name="android:fontFamily">@font/josefin_sans_bold</item>
+        <item name="android:textSize">22sp</item>
+    </style>
+
+    <style name="TextAppearance.BottomNav.SmallTitle" parent="TextAppearance.Material3.TitleSmall">
+        <item name="fontFamily">@font/josefin_sans_bold</item>
+        <item name="android:fontFamily">@font/josefin_sans_bold</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="TextAppearance.UserName.MediumSubtitle" parent="TextAppearance.Material3.TitleMedium">
+        <item name="fontFamily">@font/josefin_sans_bold</item>
+        <item name="android:fontFamily">@font/josefin_sans_bold</item>
+        <item name="android:textSize">25sp</item>
+    </style>
+
+    <style name="TextAppearance.Mssg.MediumSubtitle" parent="TextAppearance.Material3.TitleMedium">
+        <item name="fontFamily">@font/josefin_sans_regu</item>
+        <item name="android:fontFamily">@font/josefin_sans_regu</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="TextAppearance.Time.MediumSubtitle" parent="TextAppearance.Material3.TitleMedium">
+        <item name="fontFamily">@font/josefin_sans_bold</item>
+        <item name="android:fontFamily">@font/josefin_sans_bold</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="Widget.App.CardView" parent="Widget.Material3.CardView.Elevated">
         <item name="materialThemeOverlay">@style/ThemeOverlay.App.Card</item>
     </style>
 
     <style name="ThemeOverlay.App.Card" parent="">
         <item name="colorPrimary">@color/light_blue_500</item>
-        <item name="colorSurface">@color/purple_a400</item>
-        <item name="colorOnSurface">@color/light_blueA700</item>
+        <item name="colorSurface">@color/light_blueA700</item>
+        <item name="colorOnSurface">@color/black</item>
     </style>
 
-    <style name="ShapeAppearanceOverlay.App.Card.Media" parent="">
-        <item name="cornerSizeBottomLeft">0dp</item>
-        <item name="cornerSizeTopLeft">0dp</item>
+    
+    <style name="bottom_nav_menuStyle" parent="">
+        <item name="backgroundTint">@color/light_blue_700</item>
+        <item name="itemTextAppearanceInactive">@style/TextAppearance.BottomNav.SmallTitle</item>
+        <item name="itemTextAppearanceActive">@style/TextAppearance.BottomNav.LargeTitle</item>
+        <item name="itemIconTint">@color/white</item>
+        <item name="itemTextColor">@color/dark_blue</item>
+        <item name="itemTextAppearance">@style/TextAppearance.App.MediumSubtitle</item>
+        <item name="fontFamily">@font/josefin_sans_bold</item>
+        <item name="android:fontFamily">@font/josefin_sans_bold</item>
     </style>
 
 </resources>
