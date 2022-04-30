@@ -7,10 +7,9 @@
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
     android:orientation="vertical"
-    app:cardCornerRadius="10dp"
+    app:cardCornerRadius="12dp"
     app:cardElevation="4dp"
     app:cardPreventCornerOverlap="false"
-    app:shapeAppearance="@style/ShapeAppearance.App.MediumComponent"
     app:useCompatPadding="true" >
 
     <LinearLayout
