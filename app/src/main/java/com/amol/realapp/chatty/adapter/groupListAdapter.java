@@ -77,46 +77,45 @@ public class groupListAdapter extends RecyclerView.Adapter<groupListAdapter.grou
                     .into(p1.groupImage);
               }
             });
-    if(gProfile.getGroupUid()!=null){
-     FirebaseDatabase.getInstance()
-        .getReference()
-        .child("Group-Chats")
-        .child(gProfile.getGroupUid())
-        .addValueEventListener(
-            new ValueEventListener() {
+    if (gProfile.getGroupUid() != null) {
+      FirebaseDatabase.getInstance()
+          .getReference()
+          .child("Group-Chats")
+          .child(gProfile.getGroupUid())
+          .addValueEventListener(
+              new ValueEventListener() {
 
-              @Override
-              public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                  if (dataSnapshot.exists()) {
 
-                  SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm a");
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm a");
 
-                  String lastMssg =
-                      dataSnapshot.child("lstMsg").child("lastMessage").getValue(String.class);
-                  long time =
-                      dataSnapshot.child("lstMsg").child("lastMessageTime").getValue(long.class);
-                  if (lastMssg.length() > 30) {
-                    p1.groupChat.setText(lastMssg);
+                    String lastMssg =
+                        dataSnapshot.child("lstMsg").child("lastMessage").getValue(String.class);
+                    long time =
+                        dataSnapshot.child("lstMsg").child("lastMessageTime").getValue(long.class);
+                    if (lastMssg.length() > 30) {
+                      p1.groupChat.setText(lastMssg);
 
-                    p1.groupChat.setSingleLine(false);
-                    p1.groupChat.setEllipsize(TextUtils.TruncateAt.END);
-                    p1.groupChat.setLines(2);
+                      p1.groupChat.setSingleLine(false);
+                      p1.groupChat.setEllipsize(TextUtils.TruncateAt.END);
+                      p1.groupChat.setLines(2);
+                    } else {
+                      p1.groupChat.setText(lastMssg);
+                    }
+
+                    p1.groupTime.setText(dateFormat.format(new Date(time)));
+
                   } else {
-                    p1.groupChat.setText(lastMssg);
+
                   }
-
-                  p1.groupTime.setText(dateFormat.format(new Date(time)));
-
-                } else {
-
                 }
-              }
 
-              @Override
-              public void onCancelled(DatabaseError dataSnapshot) {}
-            });
-            
-            }
+                @Override
+                public void onCancelled(DatabaseError dataSnapshot) {}
+              });
+    }
 
     p1.groupName.setText(gProfile.getGroupName());
 
