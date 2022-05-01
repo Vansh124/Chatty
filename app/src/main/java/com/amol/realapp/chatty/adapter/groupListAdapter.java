@@ -77,7 +77,8 @@ public class groupListAdapter extends RecyclerView.Adapter<groupListAdapter.grou
                     .into(p1.groupImage);
               }
             });
-    FirebaseDatabase.getInstance()
+    if(gProfile.getGroupUid()!=null){
+     FirebaseDatabase.getInstance()
         .getReference()
         .child("Group-Chats")
         .child(gProfile.getGroupUid())
@@ -114,6 +115,8 @@ public class groupListAdapter extends RecyclerView.Adapter<groupListAdapter.grou
               @Override
               public void onCancelled(DatabaseError dataSnapshot) {}
             });
+            
+            }
 
     p1.groupName.setText(gProfile.getGroupName());
 
