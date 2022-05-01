@@ -36,6 +36,8 @@
             android:layout_marginBottom="10dp"
             android:layout_marginTop="30dp"
             android:background="@null"
+            android:fontFamily="@font/josefin_sans_bold"
+
             android:ems="15"
             android:hint="Phone Number" >
 
@@ -44,7 +46,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:ems="15"
-                android:fontFamily="@font/josefin_sans_regu"
+                android:fontFamily="@font/josefin_sans_bold"
                 android:inputType="phone"
                 android:maxLength="10" />
         </com.google.android.material.textfield.TextInputLayout>
