@@ -11,7 +11,7 @@
         android:layout_height="230dp"
         android:layout_gravity="center_horizontal"
         android:layout_margin="40dp"
-        android:layout_marginBottom="0dp"
+        android:layout_marginBottom="20dp"
         android:src="@drawable/ic_app_icon" />
 
     <LinearLayout
@@ -24,7 +24,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="20dp"
             android:fontFamily="@font/josefin_sans_bold"
             android:text="Enter your phone number"
             android:textAppearance="@style/TextAppearance.App.LargeTitle" />
@@ -33,7 +33,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="20dp"
             android:layout_marginTop="30dp"
             android:background="@null"
             android:fontFamily="@font/josefin_sans_bold"
