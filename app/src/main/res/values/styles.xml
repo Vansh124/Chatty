@@ -85,6 +85,12 @@
         <item name="cornerSizeBottomLeft">12dp</item>
         <item name="cornerSizeTopLeft">12dp</item>
     </style>
+    
+    <style name="ShapeAppearanceOverlay.App.Card.Profile" parent="">
+    	<item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">25dp</item>
+        <item name="cornerSizeTopLeft">25dp</item>
+    </style>
 
     <style name="bottom_nav_menuStyle" parent="">
         <item name="backgroundTint">@color/light_blue_700</item>
