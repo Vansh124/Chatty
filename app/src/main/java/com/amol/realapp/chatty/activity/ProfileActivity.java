@@ -55,7 +55,7 @@ public class ProfileActivity extends AppCompatActivity {
 
                 Glide.with(ProfileActivity.this)
                     .load(userProfile.getUserProfileImage())
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                     .placeholder(R.drawable.ic_profile)
                     .into(profileImage);
 
