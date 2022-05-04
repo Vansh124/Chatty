@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 import com.amol.realapp.chatty.R;
 import com.amol.realapp.chatty.activity.ChatActivity;
@@ -18,6 +19,7 @@ import com.amol.realapp.chatty.model.userProfile;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -121,10 +123,10 @@ public class userAdapter extends RecyclerView.Adapter<userAdapter.userItemHolder
               View v =
                   LayoutInflater.from(context)
                       .inflate(R.layout.dialog_view_user_profile_lists, null, false);
-              final Dialog s = new Dialog(context);
-              s.setContentView(v);
-              s.show();
-              s.setCancelable(true);
+              Dialog mBuilder = new Dialog(context);
+              mBuilder.setContentView(v);
+              mBuilder.setCancelable(true);
+              mBuilder.show();
               TextView userDialogName = v.findViewById(R.id.userDialogName);
               ImageView userDialogProfileImage = v.findViewById(R.id.userDialogProfileImage);
               ImageView userDialogChat = v.findViewById(R.id.userDialogChat);
@@ -146,7 +148,7 @@ public class userAdapter extends RecyclerView.Adapter<userAdapter.userItemHolder
 
                     @Override
                     public void onClick(View view) {
-                      s.dismiss();
+                      mBuilder.dismiss();
                       Intent intent = new Intent(context, ChatActivity.class);
                       intent.putExtra("userChatsName", user.getName());
                       intent.putExtra("userChatsProfile", user.getUserProfileImage());
