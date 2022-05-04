@@ -72,9 +72,10 @@ public class VerifyActivity extends AppCompatActivity {
     final AlertDialog.Builder dialog = new MaterialAlertDialogBuilder(VerifyActivity.this);
     dialog.setView(v);
     dialog.setCancelable(false);
-    dialog.show();
+    
 
     AlertDialog mDialog = dialog.create();
+    
     PhoneAuthOptions phoneOptions =
         PhoneAuthOptions.newBuilder(mAuth)
             .setPhoneNumber("+91" + mobileNumber)
@@ -116,6 +117,9 @@ public class VerifyActivity extends AppCompatActivity {
     
 
     PhoneAuthProvider.verifyPhoneNumber(phoneOptions);
+    
+    dialog.show();
+    
   }
 
   private void verifyVerificationCode(String code) {
