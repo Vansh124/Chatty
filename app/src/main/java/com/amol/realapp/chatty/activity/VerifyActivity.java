@@ -113,7 +113,7 @@ public class VerifyActivity extends AppCompatActivity {
                   }
                 })
             .build();
-    dialog.show();
+    
 
     PhoneAuthProvider.verifyPhoneNumber(phoneOptions);
   }
