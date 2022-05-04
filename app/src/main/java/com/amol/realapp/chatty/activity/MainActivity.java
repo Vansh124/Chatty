@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -36,6 +37,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.itsaky.androidide.logsender.LogSender;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -52,12 +54,11 @@ public class MainActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
-
     init();
-    listener();
+    initListener();
   }
 
-  private void listener() {
+  private void initListener() {
     btmNavView.setOnItemSelectedListener(
         new NavigationBarView.OnItemSelectedListener() {
 
@@ -103,11 +104,15 @@ public class MainActivity extends AppCompatActivity {
               }
 
               @Override
-              public void onCancelled(DatabaseError p1) {}
+              public void onCancelled(DatabaseError p2) {
+                  Log.d("MainActivity.java",p2.getMessage());
+                  
+              }
             });
   }
 
   private void init() {
+    LogSender.startLogging(MainActivity.this)
     tBar = findViewById(R.id.toolbar);
     setSupportActionBar(tBar);
     fragmentManager = getSupportFragmentManager();
