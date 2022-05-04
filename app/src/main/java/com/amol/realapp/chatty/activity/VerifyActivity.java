@@ -69,12 +69,12 @@ public class VerifyActivity extends AppCompatActivity {
 
   private void sendVerificationCode(String mobileNumber) {
     v = LayoutInflater.from(VerifyActivity.this).inflate(R.layout.dialog_custom_layout, cl, false);
-    final AlertDialog.Builder dialog = new MaterialAlertDialogBuilder(VerifyActivity.this);
+     MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(VerifyActivity.this);
     dialog.setView(v);
     dialog.setCancelable(false);
     
-
-    AlertDialog mDialog = dialog.create();
+	
+    AlertDialog mDialog = dialog.show();
     
     PhoneAuthOptions phoneOptions =
         PhoneAuthOptions.newBuilder(mAuth)
@@ -118,7 +118,7 @@ public class VerifyActivity extends AppCompatActivity {
 
     PhoneAuthProvider.verifyPhoneNumber(phoneOptions);
     
-    dialog.show();
+    
     
   }
 
