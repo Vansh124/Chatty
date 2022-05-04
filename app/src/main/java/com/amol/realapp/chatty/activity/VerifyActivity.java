@@ -16,6 +16,7 @@ import com.amol.realapp.chatty.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
@@ -35,7 +36,7 @@ public class VerifyActivity extends AppCompatActivity {
   private MaterialButton verifyOtp;
   private CoordinatorLayout cl;
   private View v;
-  
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -68,9 +69,12 @@ public class VerifyActivity extends AppCompatActivity {
 
   private void sendVerificationCode(String mobileNumber) {
     v = LayoutInflater.from(VerifyActivity.this).inflate(R.layout.dialog_custom_layout, cl, false);
-    final Dialog dialog = new Dialog(VerifyActivity.this);
-    dialog.setContentView(v);
+    final AlertDialog.Builder dialog = new MaterialAlertDialogBuilder(VerifyActivity.this);
+    dialog.setView(v);
+    dialog.setCancelable(false);
+    dialog.show();
 
+    AlertDialog mDialog = dialog.create();
     PhoneAuthOptions phoneOptions =
         PhoneAuthOptions.newBuilder(mAuth)
             .setPhoneNumber("+91" + mobileNumber)
@@ -84,7 +88,7 @@ public class VerifyActivity extends AppCompatActivity {
 
                     String code = p1.getSmsCode();
                     if (code != null) {
-                      dialog.dismiss();
+                      mDialog.dismiss();
 
                       inputOtp.setText(code);
 
@@ -94,7 +98,7 @@ public class VerifyActivity extends AppCompatActivity {
 
                   @Override
                   public void onVerificationFailed(FirebaseException p1) {
-                    dialog.dismiss();
+                    mDialog.dismiss();
 
                     Toast.makeText(VerifyActivity.this, p1.getMessage(), Toast.LENGTH_SHORT).show();
                   }
@@ -103,7 +107,7 @@ public class VerifyActivity extends AppCompatActivity {
                   public void onCodeSent(
                       String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                     super.onCodeSent(s, forceResendingToken);
-                    dialog.dismiss();
+                    mDialog.dismiss();
                     // storing the verification id that is sent to the user
                     verificationId = s;
                   }
