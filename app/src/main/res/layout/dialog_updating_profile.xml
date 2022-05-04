@@ -4,22 +4,27 @@
 	android:orientation="horizontal"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
-	android:padding="15dp"
+	android:padding="20dp"
 	android:gravity="center_vertical">
 
-	<ProgressBar
+	<com.google.android.material.progressindicator.CircularProgressIndicator
+        
 		android:layout_width="50dp"
 		android:layout_height="50dp"
+        android:indeterminate="true"
+        app:indicatorColor="@color/dark_blue"
 		android:layout_marginRight="20dp"/>
+
+
 
 	<TextView
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
 		android:text="Updating Profile"
-		android:textAppearance="?android:attr/textAppearanceLarge"
-		android:typeface="serif"
-		android:textStyle="bold"
-		android:textColor="#FF656565"/>
+		android:fontFamily="@font/josefin_sans_regu"
+        android:textSize="25sp"
+		android:textColor="@color/light_blue_900"/>
 
 </LinearLayout>
 
