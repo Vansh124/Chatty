@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
   }
 
   private void init() {
-    LogSender.startLogging(MainActivity.this)
+    LogSender.startLogging(MainActivity.this);
     tBar = findViewById(R.id.toolbar);
     setSupportActionBar(tBar);
     fragmentManager = getSupportFragmentManager();
