@@ -9,6 +9,7 @@
         <item name="colorPrimaryVariant">@color/light_blue_800</item>
         <item name="colorOnPrimary">@color/dark_blue</item>
         <item name="colorSecondaryContainer">@color/light_blue_900</item>
+        <item name="colorSurface">@color/background_home_color</item>
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
         <item name="materialCardViewStyle">@style/Widget.App.CardView</item>
