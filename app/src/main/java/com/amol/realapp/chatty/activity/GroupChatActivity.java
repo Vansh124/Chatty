@@ -11,6 +11,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -154,14 +157,21 @@ public class GroupChatActivity extends AppCompatActivity {
         });
   }
 
-  @Override
-  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    super.onActivityResult(requestCode, resultCode, data);
-    switch (requestCode) {
-      case GET_GALLERY:
-        if (data != null) {
-          if (data.getData() != null) {
-            Uri selectedImage = data.getData();
+  ActivityResultLauncher<String> getImageFromGallery =
+      registerForActivityResult(
+          new ActivityResultContracts.GetContent(),
+          new ActivityResultCallback<Uri>() {
+            @Override
+            public void onActivityResult(Uri uri) {
+              if (uri != null) {
+                getImageFromActivityLauncher(uri);
+              }
+            }
+          });
+
+  private void getImageFromActivityLauncher(Uri uri) {
+      
+      Uri selectedImage = uri;
             Calendar cal = Calendar.getInstance();
 
             final StorageReference strRef =
@@ -198,16 +208,23 @@ public class GroupChatActivity extends AppCompatActivity {
                       }
                     });
             mDialog.show();
-          }
-        }
-
-        break;
-
-      case GET_PDFS:
-        if (data != null) {
-
-          if (data.getData() != null) {
-            Uri selectedPdf = data.getData();
+      
+  }
+  
+  ActivityResultLauncher<String> getPdfFromFiles =
+      registerForActivityResult(
+          new ActivityResultContracts.GetContent(),
+          new ActivityResultCallback<Uri>() {
+            @Override
+            public void onActivityResult(Uri uri) {
+              if (uri != null) {
+                getPdfFromActivityLauncher(uri);
+              }
+            }
+ 	 });  
+  private void getPdfFromActivityLauncher(Uri uri){
+      
+      Uri selectedPdf = uri;
             uploadFile = new File(selectedPdf.getPath());
             Calendar cal = Calendar.getInstance();
             final StorageReference strRef =
@@ -245,12 +262,12 @@ public class GroupChatActivity extends AppCompatActivity {
                       }
                     });
             mDialog.show();
-          }
-        }
+      
+  }    
+      
+  
 
-        break;
-    }
-  }
+  
 
   private void recieveMessage() {
     // Recieve Messsages
@@ -385,10 +402,8 @@ public class GroupChatActivity extends AppCompatActivity {
           @Override
           public void onClick(View view) {
             dialog.dismiss();
-            Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
-            galleryIntent.setType("image/*");
-            startActivityForResult(galleryIntent, GET_GALLERY);
-          }
+            getImageFromGallery.launch("image/*");
+           }
         });
     attachPdfs.setOnClickListener(
         new View.OnClickListener() {
@@ -396,9 +411,8 @@ public class GroupChatActivity extends AppCompatActivity {
           @Override
           public void onClick(View view) {
             dialog.dismiss();
-            Intent pdfIntent = new Intent(Intent.ACTION_GET_CONTENT);
-            pdfIntent.setType("application/pdf");
-            startActivityForResult(pdfIntent, GET_PDFS);
+            getPdfFromFiles.launch("application/pdf")
+            
           }
         });
   }
