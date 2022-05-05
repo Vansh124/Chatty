@@ -4,7 +4,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContract;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -19,6 +24,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.internal.NavigationMenuItemView;
+import com.google.android.material.internal.NavigationMenuView;
+import com.google.android.material.navigation.NavigationBarItemView;
+import com.google.android.material.navigation.NavigationBarMenu;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,6 +37,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.itsaky.androidide.logsender.LogSender;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -34,22 +45,22 @@ public class MainActivity extends AppCompatActivity {
   private MaterialToolbar tBar;
   private BottomNavigationView btmNavView;
   private FragmentManager fragmentManager;
-  private static final int GET_STATUS_IMAGE = 60;
 
   private userProfile user;
+
+  private Date date;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
-
     init();
-    listener();
+    initListener();
   }
 
-  private void listener() {
+  private void initListener() {
     btmNavView.setOnItemSelectedListener(
-        new BottomNavigationView.OnNavigationItemSelectedListener() {
+        new NavigationBarView.OnItemSelectedListener() {
 
           @Override
           public boolean onNavigationItemSelected(MenuItem p1) {
@@ -64,9 +75,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
               case R.id.status:
                 fragment = new ChatsFragment();
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("image/*");
-                startActivityForResult(intent, GET_STATUS_IMAGE);
+                launchStatusImage();
                 break;
               default:
                 fragment = new ChatsFragment();
@@ -95,75 +104,83 @@ public class MainActivity extends AppCompatActivity {
               }
 
               @Override
-              public void onCancelled(DatabaseError p1) {}
+              public void onCancelled(DatabaseError p2) {
+                  Log.d("MainActivity.java",p2.getMessage());
+                  
+              }
             });
   }
 
   private void init() {
+    LogSender.startLogging(MainActivity.this);
     tBar = findViewById(R.id.toolbar);
     setSupportActionBar(tBar);
     fragmentManager = getSupportFragmentManager();
     btmNavView = findViewById(R.id.main_bottomNavigationView);
   }
 
-  @Override
-  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    super.onActivityResult(requestCode, resultCode, data);
-    if (requestCode == GET_STATUS_IMAGE) {
+  public void launchStatusImage() {
+    statusImageRetriever.launch("image/*");
+  }
 
-      if (data != null) {
-        if (data.getData() != null) {
-          final Date date = new Date();
-          final StorageReference sRef =
-              FirebaseStorage.getInstance()
-                  .getReference()
-                  .child("status")
-                  .child(date.getTime() + "");
-          sRef.putFile(data.getData())
-              .addOnCompleteListener(
-                  new OnCompleteListener<UploadTask.TaskSnapshot>() {
+  ActivityResultLauncher<String> statusImageRetriever =
+      registerForActivityResult(
+          new ActivityResultContracts.GetContent(),
+          new ActivityResultCallback<Uri>() {
+            @Override
+            public void onActivityResult(Uri uri) {
+              if (uri != null) {
+                getUriFromActivityLauncher(uri);
+              }
+            }
+          });
 
-                    @Override
-                    public void onComplete(Task<UploadTask.TaskSnapshot> p1) {
-                      sRef.getDownloadUrl()
-                          .addOnSuccessListener(
-                              new OnSuccessListener<Uri>() {
+  public void getUriFromActivityLauncher(Uri uri) {
+    date = new Date();
+    StorageReference sRef =
+        FirebaseStorage.getInstance().getReference().child("status").child(date.getTime() + "");
+    sRef.putFile(uri)
+        .addOnCompleteListener(
+            new OnCompleteListener<UploadTask.TaskSnapshot>() {
 
-                                @Override
-                                public void onSuccess(Uri p1) {
-                                  userStatus uStatus = new userStatus();
+              @Override
+              public void onComplete(Task<UploadTask.TaskSnapshot> p1) {
+                sRef.getDownloadUrl()
+                    .addOnSuccessListener(
+                        new OnSuccessListener<Uri>() {
 
-                                  uStatus.setName(user.getName());
-                                  uStatus.setProfileImage(user.getUserProfileImage());
-                                  uStatus.setLastUpdated(date.getTime());
+                          @Override
+                          public void onSuccess(Uri p1) {
+                            userStatus uStatus = new userStatus();
 
-                                  HashMap<String, Object> obj = new HashMap<>();
-                                  obj.put("name", uStatus.getName());
-                                  obj.put("profileImage", uStatus.getProfileImage());
-                                  obj.put("lastUpdated", uStatus.getLastUpdated());
+                            uStatus.setName(user.getName());
+                            uStatus.setProfileImage(user.getUserProfileImage());
+                            uStatus.setLastUpdated(date.getTime());
 
-                                  String imageUrl = p1.toString();
-                                  Status status = new Status(imageUrl, uStatus.getLastUpdated());
+                            HashMap<String, Object> obj = new HashMap<>();
+                            obj.put("name", uStatus.getName());
+                            obj.put("profileImage", uStatus.getProfileImage());
+                            obj.put("lastUpdated", uStatus.getLastUpdated());
 
-                                  FirebaseDatabase.getInstance()
-                                      .getReference()
-                                      .child("Stories")
-                                      .child(FirebaseAuth.getInstance().getUid())
-                                      .updateChildren(obj);
+                            String imageUrl = p1.toString();
+                            Status status = new Status(imageUrl, uStatus.getLastUpdated());
 
-                                  FirebaseDatabase.getInstance()
-                                      .getReference()
-                                      .child("Stories")
-                                      .child(FirebaseAuth.getInstance().getUid())
-                                      .child("statuses")
-                                      .push()
-                                      .setValue(status);
-                                }
-                              });
-                    }
-                  });
-        }
-      }
-    }
+                            FirebaseDatabase.getInstance()
+                                .getReference()
+                                .child("Stories")
+                                .child(FirebaseAuth.getInstance().getUid())
+                                .updateChildren(obj);
+
+                            FirebaseDatabase.getInstance()
+                                .getReference()
+                                .child("Stories")
+                                .child(FirebaseAuth.getInstance().getUid())
+                                .child("statuses")
+                                .push()
+                                .setValue(status);
+                          }
+                        });
+              }
+            });
   }
 }

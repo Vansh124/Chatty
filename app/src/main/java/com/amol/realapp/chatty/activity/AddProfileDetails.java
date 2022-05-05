@@ -91,13 +91,11 @@ public class AddProfileDetails extends AppCompatActivity {
     View v =
         LayoutInflater.from(AddProfileDetails.this)
             .inflate(R.layout.dialog_updating_profile, null, false);
-    final AlertDialog.Builder mDialog = new MaterialAlertDialogBuilder(AddProfileDetails.this);
+    MaterialAlertDialogBuilder mDialog = new MaterialAlertDialogBuilder(AddProfileDetails.this);
     mDialog.setView(v);
     mDialog.setCancelable(false);
 
-    mDialog.show();
-
-    final AlertDialog dialog = mDialog.create();
+    AlertDialog dialog = mDialog.show();
 
     storageReference = storage.getReference().child("Profiles").child(mAuth.getUid());
     storageReference

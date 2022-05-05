@@ -16,3 +16,5 @@
 - [x] Ability to logout
 - [x] Create groups
 - [x] Create your own status
+- [ ] send and recieve notifications after sending messages
+- [ ] Image Editing Feature

@@ -77,43 +77,45 @@ public class groupListAdapter extends RecyclerView.Adapter<groupListAdapter.grou
                     .into(p1.groupImage);
               }
             });
-    FirebaseDatabase.getInstance()
-        .getReference()
-        .child("Group-Chats")
-        .child(gProfile.getGroupUid())
-        .addValueEventListener(
-            new ValueEventListener() {
+    if (gProfile.getGroupUid() != null) {
+      FirebaseDatabase.getInstance()
+          .getReference()
+          .child("Group-Chats")
+          .child(gProfile.getGroupUid())
+          .addValueEventListener(
+              new ValueEventListener() {
 
-              @Override
-              public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                  if (dataSnapshot.exists()) {
 
-                  SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm a");
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm a");
 
-                  String lastMssg =
-                      dataSnapshot.child("lstMsg").child("lastMessage").getValue(String.class);
-                  long time =
-                      dataSnapshot.child("lstMsg").child("lastMessageTime").getValue(long.class);
-                  if (lastMssg.length() > 30) {
-                    p1.groupChat.setText(lastMssg);
+                    String lastMssg =
+                        dataSnapshot.child("lstMsg").child("lastMessage").getValue(String.class);
+                    long time =
+                        dataSnapshot.child("lstMsg").child("lastMessageTime").getValue(long.class);
+                    if (lastMssg.length() > 30) {
+                      p1.groupChat.setText(lastMssg);
 
-                    p1.groupChat.setSingleLine(false);
-                    p1.groupChat.setEllipsize(TextUtils.TruncateAt.END);
-                    p1.groupChat.setLines(2);
+                      p1.groupChat.setSingleLine(false);
+                      p1.groupChat.setEllipsize(TextUtils.TruncateAt.END);
+                      p1.groupChat.setLines(2);
+                    } else {
+                      p1.groupChat.setText(lastMssg);
+                    }
+
+                    p1.groupTime.setText(dateFormat.format(new Date(time)));
+
                   } else {
-                    p1.groupChat.setText(lastMssg);
+
                   }
-
-                  p1.groupTime.setText(dateFormat.format(new Date(time)));
-
-                } else {
-
                 }
-              }
 
-              @Override
-              public void onCancelled(DatabaseError dataSnapshot) {}
-            });
+                @Override
+                public void onCancelled(DatabaseError dataSnapshot) {}
+              });
+    }
 
     p1.groupName.setText(gProfile.getGroupName());
 
@@ -134,7 +136,6 @@ public class groupListAdapter extends RecyclerView.Adapter<groupListAdapter.grou
               s.setCancelable(true);
               TextView userDialogName = v.findViewById(R.id.userDialogName);
               ImageView userDialogProfileImage = v.findViewById(R.id.userDialogProfileImage);
-              ImageView userDialogChat = v.findViewById(R.id.userDialogChat);
               ImageView userDialogInfo = v.findViewById(R.id.userDialogInfo);
 
               userDialogName.setText(gProfile.getGroupName());
@@ -149,21 +150,7 @@ public class groupListAdapter extends RecyclerView.Adapter<groupListAdapter.grou
               } else {
                 userDialogProfileImage.setImageResource(R.drawable.ic_profile);
               }
-              userDialogChat.setOnClickListener(
-                  new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View view) {
-                      s.dismiss();
-                      Intent intent = new Intent(context, GroupChatActivity.class);
-                      intent.putExtra("groupName", gProfile.getGroupName());
-                      intent.putExtra("groupProfile", gProfile.getGroupProfile());
-                      intent.putExtra("groupUid", gProfile.getGroupUid());
-                      intent.putExtra("mKey", key);
-
-                      context.startActivity(intent);
-                    }
-                  });
+              
               userDialogInfo.setOnClickListener(
                   new View.OnClickListener() {
 

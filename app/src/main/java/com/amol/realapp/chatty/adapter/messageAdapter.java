@@ -65,7 +65,6 @@ public class messageAdapter extends RecyclerView.Adapter {
 
         Glide.with(context)
             .load(message.getImageUrl())
-            .centerCrop()
             .diskCacheStrategy(DiskCacheStrategy.DATA)
             .into(viewHolder.sentImage);
 
@@ -103,7 +102,6 @@ public class messageAdapter extends RecyclerView.Adapter {
         viewHolder.recievePdfContainer.setVisibility(View.GONE);
         Glide.with(context)
             .load(message.getImageUrl())
-            .centerCrop()
             .diskCacheStrategy(DiskCacheStrategy.DATA)
             .into(viewHolder.recievedImage);
 

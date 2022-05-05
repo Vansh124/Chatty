@@ -1,69 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
-	xmlns:tools="http://schemas.android.com/tools"
-	android:orientation="vertical"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent">
-
-	<de.hdodenhof.circleimageview.CircleImageView
-		android:src="@drawable/ic_profile"
-		android:layout_width="100dp"
-		android:layout_height="100dp"
-		android:layout_margin="40dp"
-		android:layout_gravity="center_horizontal"
-		android:id="@+id/profile_image"/>
-
-	<LinearLayout
-		android:orientation="vertical"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:padding="15dp"
-		android:layout_gravity="center_horizontal">
-
-		<EditText
-			android:layout_width="wrap_content"
-			android:inputType="textPersonName"
-			android:layout_height="wrap_content"
-			android:ems="10"
-			android:hint="Username"
-			android:id="@+id/userProfileUsername"
-			android:typeface="serif"/>
-
-		<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="Your name will be visible to your contacts."
-			android:textAppearance="?android:attr/textAppearanceSmall"
-			android:textStyle="bold"
-			android:typeface="serif"/>
-
-	</LinearLayout>
-
-	<LinearLayout
-		android:orientation="horizontal"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:layout_gravity="bottom">
-
-		<com.google.android.material.button.MaterialButton
-			style="@style/Widget.MaterialComponents.Button"
-			app:cornerRadius="10dp"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="Proceed"
-			android:layout_gravity="bottom"
-			android:layout_weight="1.0"
-			android:padding="15dp"
-			android:id="@+id/userProceedDetails"
-			android:backgroundTint="@color/light_blue_500"
-			android:textStyle="bold"
-			android:textColor="#FFFFFFFF"
-			android:typeface="serif"
-			android:layout_margin="10dp"/>
-
-	</LinearLayout>
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background_home_color"
+    >
+    
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profile_image"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="230dp"
+        android:layout_margin="40dp"
+        android:layout_width="230dp"
+        android:src="@drawable/ic_profile"/>
+    
+    <LinearLayout
+        android:layout_gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="20dp"
+        android:padding="15dp">
+        
+        <EditText
+            android:ems="14"
+            android:hint="Username"
+            android:id="@+id/userProfileUsername"
+            android:inputType="textPersonName"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textColor="@color/light_blue_700"
+            android:fontFamily="@font/josefin_sans_bold"
+            />
+        
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="Your name will be visible to your contacts."
+            android:textAppearance="@style/TextAppearance.App.MediumSubtitle"
+            android:fontFamily="@font/josefin_sans_bold"
+            android:textColor="@color/dark_blue"
+            />
+        
+    
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_gravity="top"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:orientation="horizontal">
+        
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.Material3.Button"
+            
+            android:backgroundTint="@color/light_blue_500"
+            android:id="@+id/userProceedDetails"
+            android:layout_gravity="top"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:layout_weight="1.0"
+            android:fontFamily="@font/josefin_sans_bold"
+            android:layout_width="wrap_content"
+            android:padding="15dp"
+            android:text="Proceed"
+            android:textColor="#FFFFFFFF"
+            />
+        
+    
+    </LinearLayout>
+    
 
 </LinearLayout>
-

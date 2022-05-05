@@ -9,6 +9,7 @@
         <item name="colorPrimaryVariant">@color/light_blue_800</item>
         <item name="colorOnPrimary">@color/dark_blue</item>
         <item name="colorSecondaryContainer">@color/light_blue_900</item>
+        <item name="colorSurface">@color/background_home_color</item>
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
         <item name="materialCardViewStyle">@style/Widget.App.CardView</item>
@@ -52,7 +53,7 @@
         <item name="android:textSize">15sp</item>
     </style>
 
-    <style name="TextAppearance.UserName.MediumSubtitle" parent="TextAppearance.Material3.TitleMedium">
+    <style name="TextAppearance.UserName_GroupName.MediumSubtitle" parent="TextAppearance.Material3.TitleMedium">
         <item name="fontFamily">@font/josefin_sans_bold</item>
         <item name="android:fontFamily">@font/josefin_sans_bold</item>
         <item name="android:textSize">25sp</item>
@@ -84,6 +85,20 @@
     	<item name="cornerFamily">rounded</item>
         <item name="cornerSizeBottomLeft">12dp</item>
         <item name="cornerSizeTopLeft">12dp</item>
+    </style>
+     <style name="ShapeAppearanceOverlay.App.Chat.Image.Media" parent="">
+    	<item name="cornerFamily">rounded</item>
+        <item name="cornerSizeBottomLeft">12dp</item>
+        <item name="cornerSizeTopLeft">12dp</item>
+        <item name="cornerSizeBottomRight">12dp</item>
+        <item name="cornerSizeTopRight">12dp</item>
+       
+    </style>
+    
+    <style name="ShapeAppearanceOverlay.App.Card.Profile" parent="">
+    	<item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">25dp</item>
+        <item name="cornerSizeTopLeft">25dp</item>
     </style>
 
     <style name="bottom_nav_menuStyle" parent="">
