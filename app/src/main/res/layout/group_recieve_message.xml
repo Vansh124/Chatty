@@ -29,6 +29,7 @@
                 android:textColor="@color/dark_blue"
 				android:fontFamily="@font/josefin_sans_bold"
                 android:padding="5dp"
+                android:textSize="20sp"
 				android:gravity="right|center_vertical"
 				android:id="@+id/groupRecieveUserName"
 				android:layout_weight="1.0"/>

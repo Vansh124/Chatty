@@ -43,7 +43,7 @@
 				android:gravity="left|center_vertical"
 				android:id="@+id/groupSentUserName"
                 android:textColor="@color/white"
-                android:textSize="21sp"
+                android:textSize="20sp"
 				android:layout_weight="1.0"/>
 
 		</LinearLayout>
