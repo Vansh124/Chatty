@@ -411,7 +411,7 @@ public class ChatActivity extends AppCompatActivity {
           public void onClick(View view) {
             dialog.dismiss();
             
-            getPdfFromFiles.launch("application/pdf")
+            getPdfFromFiles.launch("application/pdf");
             
              }
         });
