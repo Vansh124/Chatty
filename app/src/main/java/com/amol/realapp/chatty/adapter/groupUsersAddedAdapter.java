@@ -11,6 +11,7 @@ import com.amol.realapp.chatty.R;
 import com.amol.realapp.chatty.model.groupUsersAdded;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.android.material.imageview.ShapeableImageView;
 import java.util.ArrayList;
 
 public class groupUsersAddedAdapter
@@ -65,8 +66,8 @@ public class groupUsersAddedAdapter
   }
 
   public class groupUserAddedItemHolder extends RecyclerView.ViewHolder {
-    private ImageView groupUsersAddedProfileImg;
-    private ImageView groupUsersCross;
+    private ShapeableImageView groupUsersAddedProfileImg;
+    private ShapeableImageView groupUsersCross;
     private TextView groupUsersAddedName;
 
     public groupUserAddedItemHolder(View v) {

@@ -13,6 +13,8 @@ import com.amol.realapp.chatty.R;
 import com.amol.realapp.chatty.model.groupUsersAvailable;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.database.FirebaseDatabase;
 import de.hdodenhof.circleimageview.CircleImageView;
 import java.util.ArrayList;
@@ -57,8 +59,7 @@ public class groupUsersAvailableAdapter
         .into(p1.groupUserAvailImage);
 
     p1.groupUserAvailName.setText(userGroupAvail.getUserAvailName());
-    p1.groupUserPhoneNumber.setText(userGroupAvail.getUid());
-
+    
     p1.detailsContainer.setOnClickListener(
         new View.OnClickListener() {
 
@@ -116,17 +117,17 @@ public class groupUsersAvailableAdapter
   public int getItemCount() {
     return groupAvailListFull.size();
   }
+  
 
   public class groupUserAvailItemHolder extends RecyclerView.ViewHolder {
-    private CircleImageView groupUserAvailImage;
-    private TextView groupUserAvailName, groupUserPhoneNumber;
-    private LinearLayout detailsContainer;
+    private ShapeableImageView groupUserAvailImage;
+    private TextView groupUserAvailName;
+    private MaterialCardView detailsContainer;
 
     public groupUserAvailItemHolder(View v) {
       super(v);
       groupUserAvailImage = v.findViewById(R.id.groupUserAvailImage);
       groupUserAvailName = v.findViewById(R.id.groupUserAvailName);
-      groupUserPhoneNumber = v.findViewById(R.id.groupUserAvailPhoneNumber);
       detailsContainer = v.findViewById(R.id.detailsContainer);
     }
   }
