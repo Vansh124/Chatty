@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="5dp" >
+     >
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -49,7 +49,7 @@
                 android:gravity="center_vertical"
                 android:padding="5dp"
                 android:text="My Pdf"
-                android:textColor="#FF3E2723"
+                android:textColor="@color/black"
                 android:textSize="18sp" />
 
             <ImageView
@@ -66,6 +66,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="left"
+            android:maxWidth="220dp"
             android:orientation="vertical"
             android:padding="3dp" >
 
@@ -98,7 +99,7 @@
                 android:paddingLeft="15dp"
                 android:paddingRight="6dp"
                 android:text="12:03pm"
-                android:textColor="#FF000000" />
+                android:textColor="@color/black" />
         </LinearLayout>
     </LinearLayout>
 
