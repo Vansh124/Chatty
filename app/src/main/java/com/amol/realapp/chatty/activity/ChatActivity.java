@@ -248,9 +248,10 @@ public class ChatActivity extends AppCompatActivity {
         storage.getReference().child("chats").child(cal.getTimeInMillis() + "");
     View v =
         LayoutInflater.from(ChatActivity.this).inflate(R.layout.dialog_attachment, null, false);
-    Dialog mDialog = new Dialog(ChatActivity.this);
-    mDialog.setContentView(v);
+    MaterialAlertDialogBuilder mDialog = new MaterialAlertDialogBuilder(ChatActivity.this);
+    mDialog.setView(v);
     mDialog.setCancelable(false);
+    AlertDialog dialog=mDialog.show();
     strRef
         .putFile(selectedImage)
         .addOnCompleteListener(
@@ -265,7 +266,7 @@ public class ChatActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(Uri p1) {
                               filePath = p1.toString();
-                              mDialog.dismiss();
+                              dialog.dismiss();
                               String messageTxt = messageBox.getText().toString();
                               sendMessageWithImage(messageTxt);
                             }
@@ -273,7 +274,6 @@ public class ChatActivity extends AppCompatActivity {
                 }
               }
             });
-    mDialog.show();
   }
 
   ActivityResultLauncher<String> getPdfFromFiles =
@@ -293,14 +293,14 @@ public class ChatActivity extends AppCompatActivity {
     Uri selectedPdf = uri;
     uploadFile = new File(selectedPdf.getPath());
     Calendar cal = Calendar.getInstance();
-    final StorageReference strRef =
+    StorageReference strRef =
         storage.getReference().child("chats").child(uploadFile.getName());
     View v =
         LayoutInflater.from(ChatActivity.this).inflate(R.layout.dialog_attachment, null, false);
-    final Dialog mDialog = new Dialog(ChatActivity.this);
-    mDialog.setContentView(v);
+    MaterialAlertDialogBuilder mDialog = new MaterialAlertDialogBuilder(ChatActivity.this);
+    mDialog.setView(v);
     mDialog.setCancelable(false);
-
+    AlertDialog dialog=mDialog.show();
     strRef
         .putFile(selectedPdf)
         .addOnCompleteListener(
@@ -317,8 +317,7 @@ public class ChatActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(Uri p1) {
                               pdfFilePath = p1.toString();
-
-                              mDialog.dismiss();
+                              dialog.dismiss();
                               String messageTxt = messageBox.getText().toString();
                               sendMessageWithPdf(messageTxt);
                             }
