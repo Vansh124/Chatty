@@ -129,7 +129,6 @@ public class userAdapter extends RecyclerView.Adapter<userAdapter.userItemHolder
               mBuilder.show();
               TextView userDialogName = v.findViewById(R.id.userDialogName);
               ImageView userDialogProfileImage = v.findViewById(R.id.userDialogProfileImage);
-              ImageView userDialogChat = v.findViewById(R.id.userDialogChat);
               ImageView userDialogInfo = v.findViewById(R.id.userDialogInfo);
 
               userDialogName.setText(user.getName());
@@ -143,19 +142,7 @@ public class userAdapter extends RecyclerView.Adapter<userAdapter.userItemHolder
               } else {
                 userDialogProfileImage.setImageResource(R.drawable.ic_profile);
               }
-              userDialogChat.setOnClickListener(
-                  new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View view) {
-                      mBuilder.dismiss();
-                      Intent intent = new Intent(context, ChatActivity.class);
-                      intent.putExtra("userChatsName", user.getName());
-                      intent.putExtra("userChatsProfile", user.getUserProfileImage());
-                      intent.putExtra("userChatsUid", user.getUid());
-                      context.startActivity(intent);
-                    }
-                  });
+              
               userDialogInfo.setOnClickListener(
                   new View.OnClickListener() {
 
