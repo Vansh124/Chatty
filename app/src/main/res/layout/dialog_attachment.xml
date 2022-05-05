@@ -7,19 +7,23 @@
 	android:padding="15dp"
 	android:gravity="center_vertical">
 
-	<ProgressBar
+	<com.google.android.material.progressindicator.CircularProgressIndicator
 		android:layout_width="60dp"
 		android:layout_height="60dp"
-		android:layout_marginRight="20dp"/>
+		android:layout_marginRight="20dp"
+        android:indeterminate="true"
+        app:indicatorColor="@color/dark_blue"
+        />
 
 	<TextView
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="Uploading media"
-		android:textAppearance="?android:attr/textAppearanceLarge"
-		android:typeface="serif"
-		android:textStyle="bold"
-		android:textColor="#FF656565"/>
+		android:fontFamily="@font/josefin_sans_regu"
+        android:textColor="@color/light_blue_900"
+        android:textSize="25sp"
+        
+     />
 
 </LinearLayout>
 
