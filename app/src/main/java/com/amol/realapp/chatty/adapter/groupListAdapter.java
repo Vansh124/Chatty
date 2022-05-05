@@ -23,9 +23,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.NetworkPolicy;
-import com.squareup.picasso.Picasso;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -51,32 +48,15 @@ public class groupListAdapter extends RecyclerView.Adapter<groupListAdapter.grou
   }
 
   @Override
-  public void onBindViewHolder(final groupListAdapter.groupItemHolder p1, int p2) {
-    final groupProfile gProfile = groupDetails.get(p2);
+  public void onBindViewHolder(groupListAdapter.groupItemHolder p1, int p2) {
+    groupProfile gProfile = groupDetails.get(p2);
 
-    Picasso.get()
-        .load(gProfile.getGroupProfile())
-        .fit()
-        .centerCrop()
-        .placeholder(R.drawable.ic_profile)
-        .networkPolicy(NetworkPolicy.OFFLINE)
-        .into(
-            p1.groupImage,
-            new Callback() {
-
-              @Override
-              public void onSuccess() {}
-
-              @Override
-              public void onError(Exception p2) {
-                Picasso.get()
-                    .load(gProfile.getGroupProfile())
-                    .fit()
-                    .centerCrop()
-                    .placeholder(R.drawable.ic_profile)
-                    .into(p1.groupImage);
-              }
-            });
+    Glide.with(context)
+    .load(gProfile.getGroupProfile())
+    .diskCacheStrategy(DiskCacheStrategy.DATA)
+    .placeholder(R.drawable.ic_profile)
+    .into(p1.groupImage);
+    
     if (gProfile.getGroupUid() != null) {
       FirebaseDatabase.getInstance()
           .getReference()
