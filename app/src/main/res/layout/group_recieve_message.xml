@@ -23,12 +23,13 @@
 			android:gravity="right">
 
 			<TextView
-				android:layout_width="wrap_content"
+				android:layout_width="0dp"
 				android:layout_height="match_parent"
 				android:text="Large Text"
                 android:textColor="@color/dark_blue"
 				android:fontFamily="@font/josefin_sans_bold"
                 android:padding="5dp"
+                android:gravity="right"
 				android:gravity="left|center_vertical"
 				android:id="@+id/groupRecieveUserName"
 				android:layout_weight="1.0"/>
