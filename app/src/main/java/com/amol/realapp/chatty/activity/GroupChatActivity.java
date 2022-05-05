@@ -208,7 +208,7 @@ public class GroupChatActivity extends AppCompatActivity {
                 }
               }
             });
-    mDialog.show();
+    
   }
 
   ActivityResultLauncher<String> getPdfFromFiles =
