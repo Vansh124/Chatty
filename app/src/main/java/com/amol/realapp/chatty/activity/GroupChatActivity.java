@@ -110,10 +110,9 @@ public class GroupChatActivity extends AppCompatActivity {
     setSupportActionBar(tb);
     Glide.with(GroupChatActivity.this)
         .load(txt_profile)
-        .centerCrop()
-        .thumbnail(0.05f)
-        .diskCacheStrategy(DiskCacheStrategy.ALL)
+        .diskCacheStrategy(DiskCacheStrategy.DATA)
         .into(profileImage);
+        
     name.setText(groupName);
     getSupportActionBar().setDisplayShowTitleEnabled(false);
     getSupportActionBar().setDisplayHomeAsUpEnabled(false);
