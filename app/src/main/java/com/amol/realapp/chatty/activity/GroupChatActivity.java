@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,6 +27,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -112,7 +114,7 @@ public class GroupChatActivity extends AppCompatActivity {
         .load(txt_profile)
         .diskCacheStrategy(DiskCacheStrategy.DATA)
         .into(profileImage);
-        
+
     name.setText(groupName);
     getSupportActionBar().setDisplayShowTitleEnabled(false);
     getSupportActionBar().setDisplayHomeAsUpEnabled(false);
@@ -169,47 +171,46 @@ public class GroupChatActivity extends AppCompatActivity {
           });
 
   private void getImageFromActivityLauncher(Uri uri) {
-      
-      Uri selectedImage = uri;
-            Calendar cal = Calendar.getInstance();
 
-            final StorageReference strRef =
-                storage.getReference().child("Group-Chats").child(cal.getTimeInMillis() + "");
-            View v =
-                LayoutInflater.from(GroupChatActivity.this)
-                    .inflate(R.layout.dialog_attachment, null, false);
-            final Dialog mDialog = new Dialog(GroupChatActivity.this);
-            mDialog.setContentView(v);
-            mDialog.setCancelable(false);
+    Uri selectedImage = uri;
+    Calendar cal = Calendar.getInstance();
 
-            strRef
-                .putFile(selectedImage)
-                .addOnCompleteListener(
-                    new OnCompleteListener<UploadTask.TaskSnapshot>() {
+    StorageReference strRef =
+        storage.getReference().child("Group-Chats").child(cal.getTimeInMillis() + "");
+    View v =
+        LayoutInflater.from(GroupChatActivity.this)
+            .inflate(R.layout.dialog_attachment, null, false);
+    final Dialog mDialog = new Dialog(GroupChatActivity.this);
+    mDialog.setContentView(v);
+    mDialog.setCancelable(false);
 
-                      @Override
-                      public void onComplete(Task<UploadTask.TaskSnapshot> p1) {
-                        if (p1.isSuccessful()) {
-                          strRef
-                              .getDownloadUrl()
-                              .addOnSuccessListener(
-                                  new OnSuccessListener<Uri>() {
+    strRef
+        .putFile(selectedImage)
+        .addOnCompleteListener(
+            new OnCompleteListener<UploadTask.TaskSnapshot>() {
 
-                                    @Override
-                                    public void onSuccess(Uri p1) {
-                                      filePath = p1.toString();
-                                      mDialog.dismiss();
-                                      String messageTxt = messageBox.getText().toString();
-                                      sendMessageWithImage(messageTxt);
-                                    }
-                                  });
-                        }
-                      }
-                    });
-            mDialog.show();
-      
+              @Override
+              public void onComplete(Task<UploadTask.TaskSnapshot> p1) {
+                if (p1.isSuccessful()) {
+                  strRef
+                      .getDownloadUrl()
+                      .addOnSuccessListener(
+                          new OnSuccessListener<Uri>() {
+
+                            @Override
+                            public void onSuccess(Uri p1) {
+                              filePath = p1.toString();
+                              mDialog.dismiss();
+                              String messageTxt = messageBox.getText().toString();
+                              sendMessageWithImage(messageTxt);
+                            }
+                          });
+                }
+              }
+            });
+    mDialog.show();
   }
-  
+
   ActivityResultLauncher<String> getPdfFromFiles =
       registerForActivityResult(
           new ActivityResultContracts.GetContent(),
@@ -220,53 +221,49 @@ public class GroupChatActivity extends AppCompatActivity {
                 getPdfFromActivityLauncher(uri);
               }
             }
- 	 });  
-  private void getPdfFromActivityLauncher(Uri uri){
-      
-      Uri selectedPdf = uri;
-            uploadFile = new File(selectedPdf.getPath());
-            Calendar cal = Calendar.getInstance();
-            final StorageReference strRef =
-                storage.getReference().child("Group-Chats").child(uploadFile.getName());
-            View v =
-                LayoutInflater.from(GroupChatActivity.this)
-                    .inflate(R.layout.dialog_attachment, null, false);
-            final Dialog mDialog = new Dialog(GroupChatActivity.this);
-            mDialog.setContentView(v);
-            mDialog.setCancelable(false);
+          });
 
-            strRef
-                .putFile(selectedPdf)
-                .addOnCompleteListener(
-                    new OnCompleteListener<UploadTask.TaskSnapshot>() {
+  private void getPdfFromActivityLauncher(Uri uri) {
 
-                      @Override
-                      public void onComplete(Task<UploadTask.TaskSnapshot> p1) {
-                        if (p1.isSuccessful()) {
-                          strRef
-                              .getDownloadUrl()
-                              .addOnSuccessListener(
-                                  new OnSuccessListener<Uri>() {
+    Uri selectedPdf = uri;
+    uploadFile = new File(selectedPdf.getPath());
+    Calendar cal = Calendar.getInstance();
+    final StorageReference strRef =
+        storage.getReference().child("Group-Chats").child(uploadFile.getName());
+    View v =
+        LayoutInflater.from(GroupChatActivity.this)
+            .inflate(R.layout.dialog_attachment, null, false);
+    final Dialog mDialog = new Dialog(GroupChatActivity.this);
+    mDialog.setContentView(v);
+    mDialog.setCancelable(false);
 
-                                    @Override
-                                    public void onSuccess(Uri p1) {
-                                      pdfFilePath = p1.toString();
+    strRef
+        .putFile(selectedPdf)
+        .addOnCompleteListener(
+            new OnCompleteListener<UploadTask.TaskSnapshot>() {
 
-                                      mDialog.dismiss();
-                                      String messageTxt = messageBox.getText().toString();
-                                      sendMessageWithPdf(messageTxt);
-                                    }
-                                  });
-                        }
-                      }
-                    });
-            mDialog.show();
-      
-  }    
-      
-  
+              @Override
+              public void onComplete(Task<UploadTask.TaskSnapshot> p1) {
+                if (p1.isSuccessful()) {
+                  strRef
+                      .getDownloadUrl()
+                      .addOnSuccessListener(
+                          new OnSuccessListener<Uri>() {
 
-  
+                            @Override
+                            public void onSuccess(Uri p1) {
+                              pdfFilePath = p1.toString();
+
+                              mDialog.dismiss();
+                              String messageTxt = messageBox.getText().toString();
+                              sendMessageWithPdf(messageTxt);
+                            }
+                          });
+                }
+              }
+            });
+    mDialog.show();
+  }
 
   private void recieveMessage() {
     // Recieve Messsages
@@ -385,9 +382,9 @@ public class GroupChatActivity extends AppCompatActivity {
   private void dialogAttachment() {
 
     View v = LayoutInflater.from(this).inflate(R.layout.mydialog_custom_attachment, null, false);
-    final Dialog dialog = new Dialog(GroupChatActivity.this);
-    dialog.setContentView(v);
-    dialog.show();
+    MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(GroupChatActivity.this);
+    dialog.setView(v);
+    AlertDialog aDialog = dialog.show();
     attachDoc = v.findViewById(R.id.attachmentDocuments);
     attachAudio = v.findViewById(R.id.attachmentAudio);
     attachGallery = v.findViewById(R.id.attachmentGallery);
@@ -400,27 +397,26 @@ public class GroupChatActivity extends AppCompatActivity {
 
           @Override
           public void onClick(View view) {
-            dialog.dismiss();
+            aDialog.dismiss();
             getImageFromGallery.launch("image/*");
-           }
+          }
         });
     attachPdfs.setOnClickListener(
         new View.OnClickListener() {
 
           @Override
           public void onClick(View view) {
-            dialog.dismiss();
+            aDialog.dismiss();
             getPdfFromFiles.launch("application/pdf");
-            
           }
         });
   }
 
   private void sendMessageWithPdf(String messageTxt) {
-    final String randomKey = database.getReference().push().getKey();
+    String randomKey = database.getReference().push().getKey();
 
     Date date = new Date();
-    final Message message = new Message(messageTxt, senderUid, date.getTime());
+    Message message = new Message(messageTxt, senderUid, date.getTime());
     message.setMessage("Pdf");
     message.setPdfUrl(pdfFilePath);
     message.setPdfName(uploadFile.getName());
