@@ -180,7 +180,7 @@ public class GroupChatActivity extends AppCompatActivity {
     View v =
         LayoutInflater.from(GroupChatActivity.this)
             .inflate(R.layout.dialog_attachment, null, false);
-    MaterialAlertDialogBuilder mDialog = new MaterialAlertDialogBuilder(ChatActivity.this);
+    MaterialAlertDialogBuilder mDialog = new MaterialAlertDialogBuilder(GroupChatActivity.this);
     mDialog.setView(v);
     mDialog.setCancelable(false);
     AlertDialog dialog=mDialog.show();
@@ -233,7 +233,7 @@ public class GroupChatActivity extends AppCompatActivity {
     View v =
         LayoutInflater.from(GroupChatActivity.this)
             .inflate(R.layout.dialog_attachment, null, false);
-    MaterialAlertDialogBuilder mDialog = new MaterialAlertDialogBuilder(ChatActivity.this);
+    MaterialAlertDialogBuilder mDialog = new MaterialAlertDialogBuilder(GroupChatActivity.this);
     mDialog.setView(v);
     mDialog.setCancelable(false);
     AlertDialog dialog=mDialog.show();
