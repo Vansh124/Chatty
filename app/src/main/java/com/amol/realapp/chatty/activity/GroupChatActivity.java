@@ -410,7 +410,7 @@ public class GroupChatActivity extends AppCompatActivity {
           @Override
           public void onClick(View view) {
             dialog.dismiss();
-            getPdfFromFiles.launch("application/pdf")
+            getPdfFromFiles.launch("application/pdf");
             
           }
         });
