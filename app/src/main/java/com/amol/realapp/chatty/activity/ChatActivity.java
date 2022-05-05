@@ -12,13 +12,19 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.amol.realapp.chatty.R;
+import com.amol.realapp.chatty.activity.ChatActivity;
 import com.amol.realapp.chatty.adapter.messageAdapter;
 import com.amol.realapp.chatty.model.Message;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -60,9 +66,9 @@ public class ChatActivity extends AppCompatActivity {
 
   private LinearLayout attachPdfs, attachDoc, attachAudio, attachGallery;
 
-  private static final int GET_GALLERY = 11;
-  private static final int GET_PDFS = 12;
-
+  
+  
+  
   private File uploadFile;
 
   @Override
@@ -109,7 +115,13 @@ public class ChatActivity extends AppCompatActivity {
     String txt_profile = getIntent().getStringExtra("userChatsProfile");
 
     name.setText(txt_name);
-    Picasso.get().load(txt_profile).placeholder(R.drawable.ic_profile).into(profileImage);
+
+    Glide.with(ChatActivity.this)
+        .load(txt_profile)
+        .diskCacheStrategy(DiskCacheStrategy.DATA)
+        .placeholder(R.drawable.ic_profile)
+        .into(profileImage);
+
     getSupportActionBar().setDisplayShowTitleEnabled(false);
     getSupportActionBar().setDisplayHomeAsUpEnabled(false);
     icBack.setOnClickListener(
@@ -217,61 +229,71 @@ public class ChatActivity extends AppCompatActivity {
               }
             });
   }
+  
+  
 
-  @Override
-  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    super.onActivityResult(requestCode, resultCode, data);
-    switch (requestCode) {
-      case GET_GALLERY:
-        if (data != null) {
-          if (data.getData() != null) {
-            Uri selectedImage = data.getData();
-            Calendar cal = Calendar.getInstance();
-
-            final StorageReference strRef =
-                storage.getReference().child("chats").child(cal.getTimeInMillis() + "");
-            View v =
-                LayoutInflater.from(ChatActivity.this)
+	ActivityResultLauncher<String> getImageFromGallery =
+      registerForActivityResult(
+          new ActivityResultContracts.GetContent(),
+          new ActivityResultCallback<Uri>() {
+            @Override
+            public void onActivityResult(Uri uri) {
+              if (uri != null) {
+                getImageFromActivityLauncher(uri);
+              }
+            }
+          });
+  private void getImageFromActivityLauncher(Uri uri){
+     Uri selectedImage = uri;
+     Calendar cal = Calendar.getInstance();
+     StorageReference strRef =
+          storage.getReference().child("chats").child(cal.getTimeInMillis() + "");
+     View v =
+          LayoutInflater.from(ChatActivity.this)
                     .inflate(R.layout.dialog_attachment, null, false);
-            final Dialog mDialog = new Dialog(ChatActivity.this);
-            mDialog.setContentView(v);
-            mDialog.setCancelable(false);
-
-            strRef
-                .putFile(selectedImage)
-                .addOnCompleteListener(
-                    new OnCompleteListener<UploadTask.TaskSnapshot>() {
-
-                      @Override
+     Dialog mDialog = new Dialog(ChatActivity.this);
+     mDialog.setContentView(v);
+     mDialog.setCancelable(false);
+	  strRef
+           .putFile(selectedImage)
+            .addOnCompleteListener(
+                 new OnCompleteListener<UploadTask.TaskSnapshot>() {
+					 @Override
                       public void onComplete(Task<UploadTask.TaskSnapshot> p1) {
                         if (p1.isSuccessful()) {
-                          strRef
-                              .getDownloadUrl()
-                              .addOnSuccessListener(
-                                  new OnSuccessListener<Uri>() {
-
-                                    @Override
-                                    public void onSuccess(Uri p1) {
-                                      filePath = p1.toString();
-                                      mDialog.dismiss();
-                                      String messageTxt = messageBox.getText().toString();
-                                      sendMessageWithImage(messageTxt);
-                                    }
+                              strRef
+                                 .getDownloadUrl()
+                                 .addOnSuccessListener(
+                                	  new OnSuccessListener<Uri>() {
+                                          @Override
+                                   	   public void onSuccess(Uri p1) {
+                                     		 filePath = p1.toString();
+                                      		mDialog.dismiss();
+                                     		 String messageTxt = messageBox.getText().toString();
+                                     		 sendMessageWithImage(messageTxt);
+                                    		}
                                   });
                         }
                       }
                     });
             mDialog.show();
-          }
-        }
-
-        break;
-
-      case GET_PDFS:
-        if (data != null) {
-
-          if (data.getData() != null) {
-            Uri selectedPdf = data.getData();
+            
+   }
+    ActivityResultLauncher<String> getPdfFromFiles =
+      registerForActivityResult(
+          new ActivityResultContracts.GetContent(),
+          new ActivityResultCallback<Uri>() {
+            @Override
+            public void onActivityResult(Uri uri) {
+              if (uri != null) {
+                getPdfFromActivityLauncher(uri);
+              }
+            }
+ 	 });  
+          
+   private void getPdfFromActivityLauncher(Uri uri){
+       
+      	  Uri selectedPdf = uri;
             uploadFile = new File(selectedPdf.getPath());
             Calendar cal = Calendar.getInstance();
             final StorageReference strRef =
@@ -309,13 +331,9 @@ public class ChatActivity extends AppCompatActivity {
                       }
                     });
             mDialog.show();
-          }
-        }
-
-        break;
-    }
-  }
-
+       
+       }
+       
   private void sendMessageWithImage(String messageTxt) {
     final String randomKey = database.getReference().push().getKey();
 
@@ -380,10 +398,11 @@ public class ChatActivity extends AppCompatActivity {
           @Override
           public void onClick(View view) {
             dialog.dismiss();
-            Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
-            galleryIntent.setType("image/*");
-            startActivityForResult(galleryIntent, GET_GALLERY);
-          }
+           
+           getImageFromGallery.launch("image/*");
+           
+           
+              }
         });
     attachPdfs.setOnClickListener(
         new View.OnClickListener() {
@@ -391,10 +410,10 @@ public class ChatActivity extends AppCompatActivity {
           @Override
           public void onClick(View view) {
             dialog.dismiss();
-            Intent pdfIntent = new Intent(Intent.ACTION_GET_CONTENT);
-            pdfIntent.setType("application/pdf");
-            startActivityForResult(pdfIntent, GET_PDFS);
-          }
+            
+            getPdfFromFiles.launch("application/pdf")
+            
+             }
         });
   }
 
