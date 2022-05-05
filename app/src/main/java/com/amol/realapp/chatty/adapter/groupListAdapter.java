@@ -136,7 +136,6 @@ public class groupListAdapter extends RecyclerView.Adapter<groupListAdapter.grou
               s.setCancelable(true);
               TextView userDialogName = v.findViewById(R.id.userDialogName);
               ImageView userDialogProfileImage = v.findViewById(R.id.userDialogProfileImage);
-              ImageView userDialogChat = v.findViewById(R.id.userDialogChat);
               ImageView userDialogInfo = v.findViewById(R.id.userDialogInfo);
 
               userDialogName.setText(gProfile.getGroupName());
@@ -151,21 +150,7 @@ public class groupListAdapter extends RecyclerView.Adapter<groupListAdapter.grou
               } else {
                 userDialogProfileImage.setImageResource(R.drawable.ic_profile);
               }
-              userDialogChat.setOnClickListener(
-                  new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View view) {
-                      s.dismiss();
-                      Intent intent = new Intent(context, GroupChatActivity.class);
-                      intent.putExtra("groupName", gProfile.getGroupName());
-                      intent.putExtra("groupProfile", gProfile.getGroupProfile());
-                      intent.putExtra("groupUid", gProfile.getGroupUid());
-                      intent.putExtra("mKey", key);
-
-                      context.startActivity(intent);
-                    }
-                  });
+              
               userDialogInfo.setOnClickListener(
                   new View.OnClickListener() {
 
