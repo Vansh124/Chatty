@@ -101,7 +101,7 @@ public class GroupAddUsers extends AppCompatActivity {
               public void onCancelled(DatabaseError p1) {}
             });
 
-    groupUserAddAdp = new groupUsersAddedAdapter(GroupAddUsers.this, groupNewAddedUsers);
+    groupUserAddAdp = new groupUsersAddedAdapter(GroupAddUsers.this, groupNewAddedUsers,key);
     LinearLayoutManager lm = new LinearLayoutManager(this);
     lm.setOrientation(LinearLayoutManager.HORIZONTAL);
     groupUsersAddedView.setLayoutManager(lm);
