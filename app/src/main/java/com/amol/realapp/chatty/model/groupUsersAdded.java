@@ -27,11 +27,11 @@ public class groupUsersAdded {
     return userName;
   }
 
-  String getUid() {
+  public String getUid() {
     return this.uid;
   }
 
-  void setUid(java.lang.String uid) {
+  public void setUid(java.lang.String uid) {
     this.uid = uid;
   }
 }
