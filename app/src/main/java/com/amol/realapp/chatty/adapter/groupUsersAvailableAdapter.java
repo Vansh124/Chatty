@@ -13,11 +13,15 @@ import com.amol.realapp.chatty.R;
 import com.amol.realapp.chatty.model.groupUsersAvailable;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.imageview.ShapeableImageView;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import de.hdodenhof.circleimageview.CircleImageView;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class groupUsersAvailableAdapter
     extends RecyclerView.Adapter<groupUsersAvailableAdapter.groupUserAvailItemHolder>
@@ -27,6 +31,8 @@ public class groupUsersAvailableAdapter
   private ArrayList<groupUsersAvailable> groupAvailList;
   private ArrayList<groupUsersAvailable> groupAvailListFull;
   private String key;
+
+  private DatabaseReference groupsRef;
 
   public groupUsersAvailableAdapter(
       Context context, ArrayList<groupUsersAvailable> groupAvailList, String key) {
@@ -48,34 +54,40 @@ public class groupUsersAvailableAdapter
 
   @Override
   public void onBindViewHolder(
-      final groupUsersAvailableAdapter.groupUserAvailItemHolder p1, final int p2) {
-    final groupUsersAvailable userGroupAvail = groupAvailList.get(p2);
+      groupUsersAvailableAdapter.groupUserAvailItemHolder p1, final int p2) {
+    groupUsersAvailable userGroupAvail = groupAvailList.get(p2);
+
+    groupsRef = FirebaseDatabase.getInstance().getReference().child("Groups").child(key);
 
     Glide.with(context)
         .load(userGroupAvail.getUserAvailImage())
-        .thumbnail(0.05f)
         .diskCacheStrategy(DiskCacheStrategy.ALL)
         .placeholder(R.drawable.ic_profile)
         .into(p1.groupUserAvailImage);
 
     p1.groupUserAvailName.setText(userGroupAvail.getUserAvailName());
-    
+
     p1.detailsContainer.setOnClickListener(
         new View.OnClickListener() {
 
           @Override
           public void onClick(View view) {
-
             groupUsersAvailable grpUsers = groupAvailList.get(p2);
+
+            String uid = grpUsers.getUid();
+            String userImage = grpUsers.getUserAvailImage();
+            String userName = grpUsers.getUserAvailName();
+
+            HashMap<String, Object> userAddedGroup = new HashMap<>();
+            userAddedGroup.put("userImage", userImage);
+            userAddedGroup.put("userName", userName);
+            userAddedGroup.put("uid", uid);
             groupAvailList.remove(p2);
 
-            FirebaseDatabase.getInstance()
-                .getReference()
-                .child("Groups")
-                .child(key)
-                .child("Members")
-                .child(grpUsers.getUid())
-                .setValue(grpUsers);
+            groupsRef.child("Available_Members").child(grpUsers.getUid()).removeValue();
+
+            groupsRef.child("Members").child(grpUsers.getUid()).setValue(userAddedGroup);
+
             notifyDataSetChanged();
           }
         });
@@ -117,7 +129,6 @@ public class groupUsersAvailableAdapter
   public int getItemCount() {
     return groupAvailListFull.size();
   }
-  
 
   public class groupUserAvailItemHolder extends RecyclerView.ViewHolder {
     private ShapeableImageView groupUserAvailImage;

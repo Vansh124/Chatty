@@ -84,12 +84,13 @@ public class GroupAddUsers extends AppCompatActivity {
                   groupNewAddedUsers.clear();
 
                   for (DataSnapshot dSnapshot : p1.getChildren()) {
-                    String imageUrl = dSnapshot.child("userAvailImage").getValue(String.class);
-                    String name = dSnapshot.child("userAvailName").getValue(String.class);
-
+                    String imageUrl = dSnapshot.child("userImage").getValue(String.class);
+                    String name = dSnapshot.child("userName").getValue(String.class);
+                    String uid = dSnapshot.child("uid").getValue(String.class);
                     groupUsersAdded grPUserAdded = dSnapshot.getValue(groupUsersAdded.class);
                     grPUserAdded.setUserImage(imageUrl);
                     grPUserAdded.setUserName(name);
+                    grPUserAdded.setUid(uid);
 
                     groupNewAddedUsers.add(grPUserAdded);
                   }
@@ -101,7 +102,7 @@ public class GroupAddUsers extends AppCompatActivity {
               public void onCancelled(DatabaseError p1) {}
             });
 
-    groupUserAddAdp = new groupUsersAddedAdapter(GroupAddUsers.this, groupNewAddedUsers,key);
+    groupUserAddAdp = new groupUsersAddedAdapter(GroupAddUsers.this, groupNewAddedUsers, key);
     LinearLayoutManager lm = new LinearLayoutManager(this);
     lm.setOrientation(LinearLayoutManager.HORIZONTAL);
     groupUsersAddedView.setLayoutManager(lm);
@@ -115,22 +116,79 @@ public class GroupAddUsers extends AppCompatActivity {
 
               @Override
               public void onDataChange(DataSnapshot p1) {
+
                 groupAvailList.clear();
                 for (DataSnapshot gSnapShot : p1.getChildren()) {
 
-                  final groupUsersAvailable gAvailUsers =
-                      gSnapShot.getValue(groupUsersAvailable.class);
                   String imageUrl = gSnapShot.child("userProfileImage").getValue(String.class);
                   String name = gSnapShot.child("name").getValue(String.class);
                   String uid = gSnapShot.child("uid").getValue(String.class);
-                  gAvailUsers.setUserAvailImage(imageUrl);
-                  gAvailUsers.setUserAvailName(name);
-                  gAvailUsers.setUid(uid);
-                  if (!gAvailUsers.getUid().equals(FirebaseAuth.getInstance().getUid())) {
-                    groupAvailList.add(gAvailUsers);
-                  }
+
+                  HashMap<String, Object> gAvailUsers = new HashMap<>();
+                  gAvailUsers.put("userAvailImage", imageUrl);
+                  gAvailUsers.put("userAvailName", name);
+                  gAvailUsers.put("uid", uid);
+
+                  FirebaseDatabase.getInstance()
+                      .getReference()
+                      .child("Groups")
+                      .child(key)
+                      .child("Available_Members")
+                      .child(uid)
+                      .setValue(gAvailUsers)
+                      .addOnCompleteListener(
+                          new OnCompleteListener<Void>() {
+
+                            @Override
+                            public void onComplete(Task<Void> p1) {
+
+                              FirebaseDatabase.getInstance()
+                                  .getReference()
+                                  .child("Groups")
+                                  .child(key)
+                                  .child("Available_Members")
+                                  .addValueEventListener(
+                                      new ValueEventListener() {
+
+                                        @Override
+                                        public void onDataChange(DataSnapshot p1) {
+
+                                          groupAvailList.clear();
+
+                                          for (DataSnapshot dSnapshot : p1.getChildren()) {
+                                            groupUsersAvailable gAvailUsers =
+                                                dSnapshot.getValue(groupUsersAvailable.class);
+
+                                            String imageUrl =
+                                                dSnapshot
+                                                    .child("userAvailImage")
+                                                    .getValue(String.class);
+                                            String name =
+                                                dSnapshot
+                                                    .child("userAvailName")
+                                                    .getValue(String.class);
+                                            String uid =
+                                                dSnapshot.child("uid").getValue(String.class);
+
+                                            gAvailUsers.setUserAvailImage(imageUrl);
+                                            gAvailUsers.setUserAvailName(name);
+                                            gAvailUsers.setUid(uid);
+
+                                            if (!gAvailUsers
+                                                .getUid()
+                                                .equals(FirebaseAuth.getInstance().getUid())) {
+                                              groupAvailList.add(gAvailUsers);
+                                            }
+                                            groupUsersAvailAdapter.notifyDataSetChanged();
+                                          }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError p2) {}
+                                      });
+                            }
+                          });
                 }
-                groupUsersAvailAdapter.notifyDataSetChanged();
               }
 
               @Override
