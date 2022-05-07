@@ -105,7 +105,6 @@ public class GroupActivity extends AppCompatActivity {
 
     groupRef = database.getReference().child("Groups");
 
-    Toast.makeText(GroupActivity.this, key, Toast.LENGTH_SHORT).show();
     if (selectedImage != null) {
       storageRef = storage.getReference().child("Groups");
 
