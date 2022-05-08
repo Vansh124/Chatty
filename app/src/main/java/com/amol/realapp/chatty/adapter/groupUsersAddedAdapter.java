@@ -4,15 +4,12 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.amol.realapp.chatty.R;
 import com.amol.realapp.chatty.model.groupUsersAdded;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -42,7 +39,7 @@ public class groupUsersAddedAdapter
   }
 
   @Override
-  public void onBindViewHolder(groupUsersAddedAdapter.groupUserAddedItemHolder p1, final int p2) {
+  public void onBindViewHolder(groupUsersAddedAdapter.groupUserAddedItemHolder p1, int p2) {
 
     userAddedAvailableReference =
         FirebaseDatabase.getInstance().getReference().child("Groups").child(key);
@@ -55,7 +52,7 @@ public class groupUsersAddedAdapter
         .diskCacheStrategy(DiskCacheStrategy.ALL)
         .placeholder(R.drawable.ic_profile)
         .into(p1.groupUsersAddedProfileImg);
-
+        
     p1.groupUsersAddedName.setText(userGroupAdded.getUserName());
 
     p1.groupUsersCross.setOnClickListener(
