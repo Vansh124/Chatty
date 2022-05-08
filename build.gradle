@@ -1,4 +1,17 @@
 buildscript {
+    ext {
+    	build_gradle_version = '7.0.2'
+    }
+    
+    project.ext {
+    	compileSdk = 31
+        buildTools = "31.0.0"
+        appId = "com.amol.japa"
+        minSdk = 23
+        targetSdk = 31
+        versionCode = 100
+		versionName = "1.0.0"
+    }
     
     repositories {
        
@@ -9,7 +22,6 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:7.0.2'
         classpath 'com.google.gms:google-services:4.3.10'
-        
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.8.1'    
    
     }
@@ -17,17 +29,15 @@ buildscript {
 }
 allprojects {
     repositories {
-        maven { url 'https://jitpack.io' }
-        maven { url 'https://maven.aliyun.com/repository/public/' } 
-        maven { url 'https://maven.aliyun.com/repository/google/' }
-        maven { url 'https://maven.aliyun.com/repository/gradle-plugin/' }
-        maven { url 'https://dl.bintray.com/ppartisan/maven/' }
-        maven { url 'https://clojars.org/repo/' }
-        maven { url 'https://plugins.gradle.org/m2/' }
-
-          mavenLocal()
-        mavenCentral()
+    
         google()
+        mavenLocal()
+        mavenCentral()
+    }
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xlint:deprecation"
+        }
     }
 }
 
