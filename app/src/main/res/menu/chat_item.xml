@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu
-    xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-                >
-    
-     <item
-        android:id="@+id/profile"
-        android:title="ProfileSettings"
-        app:showAsAction="always"
-        android:icon="@drawable/profile_image"
-    />
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" >
 
+    <item
+        android:id="@+id/profile"
+        android:icon="@drawable/profile_image"
+        android:title="ProfileSettings"
+        app:showAsAction="always"/>
     <item
         android:id="@+id/logout"
         android:title="Logout"/>
-    
+
 </menu>

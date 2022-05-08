@@ -105,7 +105,6 @@ public class GroupActivity extends AppCompatActivity {
 
     groupRef = database.getReference().child("Groups");
 
-    Toast.makeText(GroupActivity.this, key, Toast.LENGTH_SHORT).show();
     if (selectedImage != null) {
       storageRef = storage.getReference().child("Groups");
 
@@ -177,8 +176,7 @@ public class GroupActivity extends AppCompatActivity {
                 public void onComplete(Task<Void> p1) {
                   if (p1.isSuccessful()) {
                     String newKey = key.toString();
-                    Toast.makeText(GroupActivity.this, newKey, Toast.LENGTH_SHORT).show();
-
+                    
                     Intent intent = new Intent(GroupActivity.this, MainActivity.class);
                     intent.putExtra("myPushKey", newKey);
                     startActivity(intent);
