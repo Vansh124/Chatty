@@ -8,10 +8,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import com.amol.realapp.chatty.R;
 import com.amol.realapp.chatty.model.groupProfile;
-import com.amol.realapp.chatty.model.userProfile;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -23,8 +25,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import de.hdodenhof.circleimageview.CircleImageView;
-import java.util.ArrayList;
-import java.util.Calendar;
 
 public class GroupActivity extends AppCompatActivity {
 
@@ -55,10 +55,7 @@ public class GroupActivity extends AppCompatActivity {
 
           @Override
           public void onClick(View view) {
-            Intent intent = new Intent();
-            intent.setAction(Intent.ACTION_GET_CONTENT);
-            intent.setType("image/*");
-            startActivityForResult(intent, 43);
+            groupImageRetriever.launch("image/*");
           }
         });
     submiGrpDetails.setOnClickListener(
@@ -176,7 +173,7 @@ public class GroupActivity extends AppCompatActivity {
                 public void onComplete(Task<Void> p1) {
                   if (p1.isSuccessful()) {
                     String newKey = key.toString();
-                    
+
                     Intent intent = new Intent(GroupActivity.this, MainActivity.class);
                     intent.putExtra("myPushKey", newKey);
                     startActivity(intent);
@@ -189,5 +186,23 @@ public class GroupActivity extends AppCompatActivity {
                 }
               });
     }
+  }
+
+  ActivityResultLauncher<String> groupImageRetriever =
+      registerForActivityResult(
+          new ActivityResultContracts.GetContent(),
+          new ActivityResultCallback<Uri>() {
+            @Override
+            public void onActivityResult(Uri uri) {
+              if (uri != null) {
+                getUriFromActivityLauncher(uri);
+              }
+            }
+          });
+
+  public void getUriFromActivityLauncher(Uri uri) {
+
+    image.setImageURI(uri);
+    selectedImage = uri;
   }
 }
