@@ -1,62 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
-	
-    android:orientation="horizontal"
-	android:layout_width="wrap_content"
-	android:layout_height="wrap_content"
-    android:background="@color/dark_blue"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="4dp"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:layout_margin="2dp"
-    >
+    android:background="@color/dark_blue"
+    android:orientation="horizontal"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp" >
 
-	<LinearLayout
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:gravity="center"
-        android:orientation="vertical"
-        >
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical" >
 
-		<com.google.android.material.imageview.ShapeableImageView
-			android:src="@drawable/ic_profile"
-			android:layout_width="130dp"
-			android:layout_height="90dp"
-			android:id="@+id/groupUserAddedProfileImage"
-            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.Group.Users.Added.Profile.Media"
-            />
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/groupUserAddedProfileImage"
+            android:layout_width="130dp"
+            android:layout_height="90dp"
+            android:src="@drawable/ic_profile"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.Group.Users.Added.Profile.Media" />
 
-		
-		<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="Username"
-			android:fontFamily="@font/josefin_sans_bold"
-            android:textSize="25sp"
+        <TextView
+            android:id="@+id/groupUserAddedName"
+            android:layout_width="50dp"
+            android:layout_height="15dp"
+            android:layout_centerHorizontal="true"
+            android:fontFamily="@font/josefin_sans_bold"
             android:maxLines="3"
+            android:padding="8dp"
             android:scrollHorizontally="false"
+            android:text="Username"
             android:textColor="@color/white"
-		    android:padding="8dp"
-			android:id="@+id/groupUserAddedName"
-			android:layout_centerHorizontal="true"/>
-            
-		<com.google.android.material.imageview.ShapeableImageView
-			android:src="@drawable/ic_cross"
-			android:layout_width="match_parent"
-			android:layout_height="30dp"
-			android:layout_alignEnd="@id/groupUserAddedProfileImage"
-			android:background="@color/dark_blue"
-            app:tint="@color/white"
-            
-			android:layout_alignTop="@id/groupUserAddedProfileImage"
-			android:id="@+id/groupUserAddedCross"
-            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.Group.Users.Remove.Profile.Media"
-       	 
-            />
+            android:textSize="25sp" />
 
-        
-	</LinearLayout>
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/groupUserAddedCross"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_alignEnd="@id/groupUserAddedProfileImage"
+            android:layout_alignTop="@id/groupUserAddedProfileImage"
+            android:background="@color/dark_blue"
+            android:src="@drawable/ic_cross"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.Group.Users.Remove.Profile.Media"
+            app:tint="@color/white" />
+    </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>
-
