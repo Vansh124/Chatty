@@ -37,9 +37,9 @@ public class TopStatusAdapter extends RecyclerView.Adapter<TopStatusAdapter.TopS
 
   @Override
   public void onBindViewHolder(final TopStatusAdapter.TopStatusViewHolder p1, int p2) {
-    final userStatus uStatus = userStatuses.get(p2);
+     userStatus uStatus = userStatuses.get(p2);
 
-    final Status lastStatus = uStatus.getStatuses().get(uStatus.getStatuses().size() - 1);
+     Status lastStatus = uStatus.getStatuses().get(uStatus.getStatuses().size() - 1);
 
     p1.circleStatusView.setPortionsCount(uStatus.getStatuses().size());
 
