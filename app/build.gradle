@@ -43,6 +43,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-database'
     implementation 'com.google.firebase:firebase-crashlytics'
     implementation 'com.google.firebase:firebase-inappmessaging-display'
+    implementation 'com.google.firebase:firebase-appcheck-safetynet:16.0.0'
     
     implementation 'com.github.3llomi:CircularStatusView:V1.0.2'
     
