@@ -25,6 +25,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
@@ -44,6 +45,7 @@ public class GroupAddUsers extends AppCompatActivity {
 
   private String currentUserUid, currentUserName, currentUserProfile;
   private String key;
+  private DatabaseReference groupRef,userRef;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +56,9 @@ public class GroupAddUsers extends AppCompatActivity {
   }
 
   private void init() {
-
+	groupRef=FirebaseDatabase.getInstance().getReference().child("Groups");
+    userRef=FirebaseDatabase.getInstance().getReference().child("Users");
+    
     toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
     groupUsersAvailableView = findViewById(R.id.usersAvailableList);
@@ -70,9 +74,7 @@ public class GroupAddUsers extends AppCompatActivity {
         FirebaseDatabase.getInstance().getReference().push().getKey()
             + FirebaseAuth.getInstance().getUid();
 
-    FirebaseDatabase.getInstance()
-        .getReference()
-        .child("Groups")
+    	groupRef
         .child(key)
         .child("Members")
         .addValueEventListener(
@@ -108,9 +110,7 @@ public class GroupAddUsers extends AppCompatActivity {
     groupUsersAddedView.setLayoutManager(lm);
     groupUsersAddedView.setAdapter(groupUserAddAdp);
 
-    FirebaseDatabase.getInstance()
-        .getReference()
-        .child("Users")
+    	userRef
         .addValueEventListener(
             new ValueEventListener() {
 
@@ -129,10 +129,8 @@ public class GroupAddUsers extends AppCompatActivity {
                   gAvailUsers.put("userAvailName", name);
                   gAvailUsers.put("uid", uid);
 
-                  FirebaseDatabase.getInstance()
-                      .getReference()
-                      .child("Groups")
-                      .child(key)
+                  
+                      groupRef.child(key)
                       .child("Available_Members")
                       .child(uid)
                       .setValue(gAvailUsers)
@@ -142,10 +140,8 @@ public class GroupAddUsers extends AppCompatActivity {
                             @Override
                             public void onComplete(Task<Void> p1) {
 
-                              FirebaseDatabase.getInstance()
-                                  .getReference()
-                                  .child("Groups")
-                                  .child(key)
+                              	
+                                  groupRef.child(key)
                                   .child("Available_Members")
                                   .addValueEventListener(
                                       new ValueEventListener() {
@@ -208,10 +204,8 @@ public class GroupAddUsers extends AppCompatActivity {
           @Override
           public void onRefresh() {
 
-            FirebaseDatabase.getInstance()
-                .getReference()
-                .child("Users")
-                .addValueEventListener(
+            
+                userRef.addValueEventListener(
                     new ValueEventListener() {
 
                       @Override
@@ -219,7 +213,7 @@ public class GroupAddUsers extends AppCompatActivity {
                         groupAvailList.clear();
                         for (DataSnapshot gSnapShot : p1.getChildren()) {
 
-                          final groupUsersAvailable gAvailUsers =
+                           groupUsersAvailable gAvailUsers =
                               gSnapShot.getValue(groupUsersAvailable.class);
                           String imageUrl =
                               gSnapShot.child("userProfileImage").getValue(String.class);
@@ -250,10 +244,8 @@ public class GroupAddUsers extends AppCompatActivity {
 
           @Override
           public void onClick(View view) {
-            FirebaseDatabase.getInstance()
-                .getReference()
-                .child("Users")
-                .child(FirebaseAuth.getInstance().getUid())
+            	
+                userRef.child(FirebaseAuth.getInstance().getUid())
                 .addValueEventListener(
                     new ValueEventListener() {
 
@@ -268,10 +260,8 @@ public class GroupAddUsers extends AppCompatActivity {
                           currentUserGroup.put("uid", currentUserUid);
                           currentUserGroup.put("userAvailImage", currentUserProfile);
                           currentUserGroup.put("userAvailName", currentUserName);
-                          FirebaseDatabase.getInstance()
-                              .getReference()
-                              .child("Groups")
-                              .child(key)
+                          
+                              groupRef.child(key)
                               .child("Members")
                               .child(FirebaseAuth.getInstance().getUid())
                               .setValue(currentUserGroup)
@@ -326,9 +316,17 @@ public class GroupAddUsers extends AppCompatActivity {
           @Override
           public boolean onQueryTextChange(String p2) {
             groupUsersAvailAdapter.getFilter().filter(p2);
+
             return false;
           }
         });
     return super.onCreateOptionsMenu(menu);
+  }
+
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    FirebaseDatabase.getInstance().getReference().child("Groups").child(key).removeValue();
+    
   }
 }
