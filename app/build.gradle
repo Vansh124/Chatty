@@ -4,14 +4,22 @@ apply plugin: 'com.google.firebase.crashlytics'
 
 
 android {
-    compileSdkVersion 31
-    
+    compileSdkVersion rootProject.ext.compileSdk
+    buildToolsVersion rootProject.ext.buildTools
+
     defaultConfig {
-        applicationId "com.amol.realapp.chatty"
-        minSdkVersion 24
-        targetSdkVersion 31
-        versionCode 100
-        versionName "1.0.0"
+        applicationId rootProject.ext.appId
+        minSdkVersion rootProject.ext.minSdk
+        targetSdkVersion rootProject.ext.targetSdk
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
+        
+        vectorDrawables.useSupportLibrary = true
+    }
+    
+    buildFeatures {
+    	viewBinding true
+        dataBinding true
     }
 
     buildTypes {

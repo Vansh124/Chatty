@@ -116,8 +116,6 @@ public class groupMessageAdapter extends RecyclerView.Adapter {
                     viewHolder.sentGroupUserName.setText(gAvailData.getUserAvailName());
                     Glide.with(context)
                         .load(gAvailData.getUserAvailImage())
-                        .centerCrop()
-                        .thumbnail(0.05f)
                         .placeholder(R.drawable.ic_profile)
                         .into(viewHolder.sentGroupUserImage);
                   }
@@ -179,8 +177,6 @@ public class groupMessageAdapter extends RecyclerView.Adapter {
                     viewHolder.recieveGroupUserName.setText(gAvailData.getUserAvailName());
                     Glide.with(context)
                         .load(gAvailData.getUserAvailImage())
-                        .centerCrop()
-                        .thumbnail(0.05f)
                         .placeholder(R.drawable.ic_profile)
                         .into(viewHolder.recieveGroupUserImage);
                   }
