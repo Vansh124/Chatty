@@ -7,8 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,7 +22,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -62,10 +63,8 @@ public class AddProfileDetails extends AppCompatActivity {
 
           @Override
           public void onClick(View view) {
-            Intent intent = new Intent();
-            intent.setAction(Intent.ACTION_GET_CONTENT);
-            intent.setType("image/*");
-            startActivityForResult(intent, 45);
+
+            profileImageRetriever.launch("image/*");
           }
         });
     proceedUserDetails.setOnClickListener(
@@ -205,14 +204,21 @@ public class AddProfileDetails extends AppCompatActivity {
             });
   }
 
-  @Override
-  protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-    super.onActivityResult(requestCode, resultCode, data);
-    if (data != null) {
-      if (data.getData() != null) {
-        userProfileImage.setImageURI(data.getData());
-        selectedImage = data.getData();
-      }
-    }
+  ActivityResultLauncher<String> profileImageRetriever =
+      registerForActivityResult(
+          new ActivityResultContracts.GetContent(),
+          new ActivityResultCallback<Uri>() {
+            @Override
+            public void onActivityResult(Uri uri) {
+              if (uri != null) {
+                getUriFromActivityLauncher(uri);
+              }
+            }
+          });
+
+  public void getUriFromActivityLauncher(Uri uri) {
+
+    userProfileImage.setImageURI(uri);
+    selectedImage = uri;
   }
 }
