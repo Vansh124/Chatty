@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import com.amol.realapp.chatty.R;
+import com.amol.realapp.chatty.databinding.ActivityMainBinding;
 import com.amol.realapp.chatty.fragment.ChatsFragment;
 import com.amol.realapp.chatty.fragment.GroupsFragment;
 import com.amol.realapp.chatty.model.Status;
@@ -50,44 +51,51 @@ public class MainActivity extends AppCompatActivity {
 
   private Date date;
 
+  private ActivityMainBinding binding;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
+    LogSender.startLogging(this);
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main);
+    binding = ActivityMainBinding.inflate(getLayoutInflater());
+    setContentView(binding.getRoot());
     init();
     initListener();
   }
 
+  private void init() {
+    tBar = binding.toolbar;
+    btmNavView = binding.mainBottomNavigationView;
+
+    setSupportActionBar(tBar);
+    fragmentManager = getSupportFragmentManager();
+  }
+
   private void initListener() {
     btmNavView.setOnItemSelectedListener(
-        new NavigationBarView.OnItemSelectedListener() {
+        p1 -> {
+          Fragment fragment = null;
+          switch (p1.getItemId()) {
+            case R.id.chats:
+              fragment = new ChatsFragment();
+              break;
+            case R.id.groups:
+              fragment = new GroupsFragment();
 
-          @Override
-          public boolean onNavigationItemSelected(MenuItem p1) {
-            Fragment fragment = null;
-            switch (p1.getItemId()) {
-              case R.id.chats:
-                fragment = new ChatsFragment();
-                break;
-              case R.id.groups:
-                fragment = new GroupsFragment();
-
-                break;
-              case R.id.status:
-                fragment = new ChatsFragment();
-                launchStatusImage();
-                break;
-              default:
-                fragment = new ChatsFragment();
-            }
-            getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.container, fragment)
-                .commit();
-
-            return true;
+              break;
+            case R.id.status:
+              fragment = new ChatsFragment();
+              launchStatusImage();
+              break;
+            default:
+              fragment = new ChatsFragment();
           }
+
+          fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+
+          return true;
         });
+
     btmNavView.setSelectedItemId(R.id.chats);
     FirebaseDatabase.getInstance()
         .getReference()
@@ -105,18 +113,9 @@ public class MainActivity extends AppCompatActivity {
 
               @Override
               public void onCancelled(DatabaseError p2) {
-                  Log.d("MainActivity.java",p2.getMessage());
-                  
+                Log.d("MainActivity.java", p2.getMessage());
               }
             });
-  }
-
-  private void init() {
-    LogSender.startLogging(MainActivity.this);
-    tBar = findViewById(R.id.toolbar);
-    setSupportActionBar(tBar);
-    fragmentManager = getSupportFragmentManager();
-    btmNavView = findViewById(R.id.main_bottomNavigationView);
   }
 
   public void launchStatusImage() {
