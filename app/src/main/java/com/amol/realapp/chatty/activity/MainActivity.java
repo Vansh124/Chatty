@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
   private Date date;
 
   private ActivityMainBinding binding;
+  private FirebaseAuth auth;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
   }
 
   private void init() {
+    auth = FirebaseAuth.getInstance();
     tBar = binding.toolbar;
     btmNavView = binding.mainBottomNavigationView;
 
@@ -181,5 +183,14 @@ public class MainActivity extends AppCompatActivity {
                         });
               }
             });
+  }
+
+  @Override
+  protected void onStart() {
+    super.onStart();
+    if (auth.getCurrentUser() == null) {
+      startActivity(new Intent(this, RegisterActivity.class));
+      finish();
+    }
   }
 }
