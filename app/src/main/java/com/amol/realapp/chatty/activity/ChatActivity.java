@@ -1,9 +1,11 @@
 package com.amol.realapp.chatty.activity;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -26,6 +29,8 @@ import com.amol.realapp.chatty.adapter.messageAdapter;
 import com.amol.realapp.chatty.model.Message;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.dsphotoeditor.sdk.activity.DsPhotoEditorActivity;
+import com.dsphotoeditor.sdk.utils.DsPhotoEditorConstants;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -54,6 +59,7 @@ public class ChatActivity extends AppCompatActivity {
   private String usersName, recieverUid, senderUid;
   private String senderRoom, recieverRoom;
   private String filePath, pdfFilePath;
+  private String images_fileString;
   private FloatingActionButton sendMessage;
   private EditText messageBox;
 
@@ -68,6 +74,8 @@ public class ChatActivity extends AppCompatActivity {
   private LinearLayout attachPdfs, attachDoc, attachAudio, attachGallery;
 
   private File uploadFile;
+  private Uri imageUri,selectedImage;
+  private Intent resultIntent;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -138,7 +146,9 @@ public class ChatActivity extends AppCompatActivity {
           public void onClick(View view) {
             String messageTxt = messageBox.getText().toString();
             if (messageTxt.isEmpty()) {
-
+			// Do nothing
+            
+            
             } else {
               sendMessage(messageTxt);
             }
@@ -241,7 +251,71 @@ public class ChatActivity extends AppCompatActivity {
           });
 
   private void getImageFromActivityLauncher(Uri uri) {
-    Uri selectedImage = uri;
+    
+    File f1 =
+        new File(
+            Environment.getExternalStorageDirectory() + "/" + "Chatty" + "/" + "Images",
+            FirebaseAuth.getInstance().getCurrentUser().getUid());
+    if (!f1.exists()) {
+      f1.mkdirs();
+    }
+    images_fileString =
+        "Chatty"
+            + File.separator
+            + "Images"
+            + File.separator
+            + FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+    
+    Intent dsPhotoEditorIntent = new Intent(ChatActivity.this, DsPhotoEditorActivity.class);
+    dsPhotoEditorIntent.setData(uri);
+
+    dsPhotoEditorIntent.putExtra(
+        DsPhotoEditorConstants.DS_PHOTO_EDITOR_OUTPUT_DIRECTORY, images_fileString);
+
+      intentLauncher.launch(dsPhotoEditorIntent);
+    
+  }
+  private ActivityResultLauncher<Intent> intentLauncher =
+      registerForActivityResult(
+          new ActivityResultContracts.StartActivityForResult(),
+          result -> {
+            if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+              resultIntent = result.getData();
+              imageUri = resultIntent.getData();
+
+              if (imageUri != null) {
+                Log.d(
+                    "ChatActivity.java",
+                    "Image Uri  "
+                        + imageUri.toString()
+                        + " File Name: "
+                        + imageUri.getLastPathSegment());
+				
+                uploadToFirebase(imageUri);
+                
+                selectedImage = imageUri;
+              } else {
+                Log.d("ChatActivity.java", "Image Uri null");
+              }
+            }
+          });
+
+
+  ActivityResultLauncher<String> getPdfFromFiles =
+      registerForActivityResult(
+          new ActivityResultContracts.GetContent(),
+          new ActivityResultCallback<Uri>() {
+            @Override
+            public void onActivityResult(Uri uri) {
+              if (uri != null) {
+                getPdfFromActivityLauncher(uri);
+              }
+            }
+          });
+          
+  private void uploadToFirebase(Uri uri){
+      selectedImage = uri;
     Calendar cal = Calendar.getInstance();
     StorageReference strRef =
         storage.getReference().child("chats").child(cal.getTimeInMillis() + "");
@@ -274,19 +348,9 @@ public class ChatActivity extends AppCompatActivity {
               }
             });
   }
-
-  ActivityResultLauncher<String> getPdfFromFiles =
-      registerForActivityResult(
-          new ActivityResultContracts.GetContent(),
-          new ActivityResultCallback<Uri>() {
-            @Override
-            public void onActivityResult(Uri uri) {
-              if (uri != null) {
-                getPdfFromActivityLauncher(uri);
-              }
-            }
-          });
-
+  private void showToast(String text) {
+    Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+  }
   private void getPdfFromActivityLauncher(Uri uri) {
 
     Uri selectedPdf = uri;

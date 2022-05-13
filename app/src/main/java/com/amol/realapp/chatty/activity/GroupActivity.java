@@ -1,10 +1,13 @@
 package com.amol.realapp.chatty.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -14,6 +17,8 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import com.amol.realapp.chatty.R;
 import com.amol.realapp.chatty.model.groupProfile;
+import com.dsphotoeditor.sdk.activity.DsPhotoEditorActivity;
+import com.dsphotoeditor.sdk.utils.DsPhotoEditorConstants;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -25,20 +30,22 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import de.hdodenhof.circleimageview.CircleImageView;
+import java.io.File;
 
 public class GroupActivity extends AppCompatActivity {
 
   private DatabaseReference groupRef;
   private StorageReference storageRef;
-  private Uri selectedImage;
-  private CircleImageView image;
+  private CircleImageView groupImage;
   private FirebaseDatabase database;
   private FirebaseStorage storage;
   private EditText name;
   private String txtName;
   private MaterialButton submiGrpDetails;
   private FirebaseAuth mAuth;
-  private String key;
+  private String key, groupProfilePhotos_fileString;
+  private Intent resultIntent;
+  private Uri selectedImage, imageUri;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +57,7 @@ public class GroupActivity extends AppCompatActivity {
 
   private void initListener() {
 
-    image.setOnClickListener(
+    groupImage.setOnClickListener(
         new View.OnClickListener() {
 
           @Override
@@ -77,23 +84,12 @@ public class GroupActivity extends AppCompatActivity {
 
   private void init() {
 
-    image = findViewById(R.id.groupProfileImage);
+    groupImage = findViewById(R.id.groupProfileImage);
     name = findViewById(R.id.groupProfileName);
     mAuth = FirebaseAuth.getInstance();
     storage = FirebaseStorage.getInstance();
     database = FirebaseDatabase.getInstance();
     submiGrpDetails = findViewById(R.id.submitGroupDetails);
-  }
-
-  @Override
-  public void onActivityResult(int requestCode, int resultCode, Intent data) {
-    super.onActivityResult(requestCode, resultCode, data);
-    if (data != null) {
-      if (data.getData() != null) {
-        image.setImageURI(data.getData());
-        selectedImage = data.getData();
-      }
-    }
   }
 
   private void actCreateGroup() {
@@ -188,7 +184,7 @@ public class GroupActivity extends AppCompatActivity {
     }
   }
 
-  ActivityResultLauncher<String> groupImageRetriever =
+  private ActivityResultLauncher<String> groupImageRetriever =
       registerForActivityResult(
           new ActivityResultContracts.GetContent(),
           new ActivityResultCallback<Uri>() {
@@ -201,8 +197,71 @@ public class GroupActivity extends AppCompatActivity {
           });
 
   public void getUriFromActivityLauncher(Uri uri) {
+    File f1 =
+        new File(
+            Environment.getExternalStorageDirectory() + "/" + "Chatty" + "/" + "GroupProfilePhotos",
+            FirebaseAuth.getInstance().getCurrentUser().getUid());
+    if (!f1.exists()) {
+      f1.mkdirs();
+    }
+    groupProfilePhotos_fileString =
+        "Chatty"
+            + File.separator
+            + "GroupProfilePhotos"
+            + File.separator
+            + FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-    image.setImageURI(uri);
-    selectedImage = uri;
+    Intent dsPhotoEditorIntent = new Intent(GroupActivity.this, DsPhotoEditorActivity.class);
+    dsPhotoEditorIntent.setData(uri);
+
+    dsPhotoEditorIntent.putExtra(
+        DsPhotoEditorConstants.DS_PHOTO_EDITOR_OUTPUT_DIRECTORY, groupProfilePhotos_fileString);
+
+    int[] toolsToHide = {
+      DsPhotoEditorActivity.TOOL_CONTRAST,
+      DsPhotoEditorActivity.TOOL_DRAW,
+      DsPhotoEditorActivity.TOOL_EXPOSURE,
+      DsPhotoEditorActivity.TOOL_FILTER,
+      DsPhotoEditorActivity.TOOL_FRAME,
+      DsPhotoEditorActivity.TOOL_ORIENTATION,
+      DsPhotoEditorActivity.TOOL_PIXELATE,
+      DsPhotoEditorActivity.TOOL_ROUND,
+      DsPhotoEditorActivity.TOOL_SATURATION,
+      DsPhotoEditorActivity.TOOL_SHARPNESS,
+      DsPhotoEditorActivity.TOOL_STICKER,
+      DsPhotoEditorActivity.TOOL_TEXT,
+      DsPhotoEditorActivity.TOOL_VIGNETTE,
+      DsPhotoEditorActivity.TOOL_WARMTH
+    };
+    dsPhotoEditorIntent.putExtra(DsPhotoEditorConstants.DS_PHOTO_EDITOR_TOOLS_TO_HIDE, toolsToHide);
+    intentLauncher.launch(dsPhotoEditorIntent);
+  }
+
+  private ActivityResultLauncher<Intent> intentLauncher =
+      registerForActivityResult(
+          new ActivityResultContracts.StartActivityForResult(),
+          result -> {
+            if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+              resultIntent = result.getData();
+              imageUri = resultIntent.getData();
+
+              if (imageUri != null) {
+                Log.d(
+                    "GroupActivity.java",
+                    "Image Uri  "
+                        + imageUri.toString()
+                        + " File Name: "
+                        + imageUri.getLastPathSegment());
+
+                groupImage.setImageURI(imageUri);
+                selectedImage = imageUri;
+              } else {
+                Log.d("GroupActivity.java", "Image Uri null");
+              }
+            }
+          });
+
+  private void showToast(String text) {
+    Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
   }
 }
