@@ -16,6 +16,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import com.amol.realapp.chatty.LogMSender;
 import com.amol.realapp.chatty.R;
 import com.amol.realapp.chatty.databinding.ActivityMainBinding;
 import com.amol.realapp.chatty.fragment.ChatsFragment;
@@ -43,7 +44,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.itsaky.androidide.logsender.LogSender;
 import java.io.File;
 import java.util.Date;
 import java.util.HashMap;
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    LogSender.startLogging(this);
+    new LogMSender().loggingStart(this);
     super.onCreate(savedInstanceState);
     binding = ActivityMainBinding.inflate(getLayoutInflater());
     setContentView(binding.getRoot());
