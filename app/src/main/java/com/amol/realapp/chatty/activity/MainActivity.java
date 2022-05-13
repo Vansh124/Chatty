@@ -1,11 +1,14 @@
 package com.amol.realapp.chatty.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContract;
@@ -20,6 +23,8 @@ import com.amol.realapp.chatty.fragment.GroupsFragment;
 import com.amol.realapp.chatty.model.Status;
 import com.amol.realapp.chatty.model.userProfile;
 import com.amol.realapp.chatty.model.userStatus;
+import com.dsphotoeditor.sdk.activity.DsPhotoEditorActivity;
+import com.dsphotoeditor.sdk.utils.DsPhotoEditorConstants;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -39,6 +44,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.itsaky.androidide.logsender.LogSender;
+import java.io.File;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -53,6 +59,10 @@ public class MainActivity extends AppCompatActivity {
 
   private ActivityMainBinding binding;
   private FirebaseAuth auth;
+  
+  private Uri selectedImage,imageUri;
+  private Intent resultIntent;
+  private String status_fileString;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -135,8 +145,63 @@ public class MainActivity extends AppCompatActivity {
               }
             }
           });
+          
+  private void getUriFromActivityLauncher(Uri uri) {
+    
+    File f1 =
+        new File(
+            Environment.getExternalStorageDirectory() + "/" + "Chatty" + "/" + "Status",
+            FirebaseAuth.getInstance().getCurrentUser().getUid());
+    if (!f1.exists()) {
+      f1.mkdirs();
+    }
+    status_fileString =
+        "Chatty"
+            + File.separator
+            + "Status"
+            + File.separator
+            + FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-  public void getUriFromActivityLauncher(Uri uri) {
+    
+    Intent dsPhotoEditorIntent = new Intent(MainActivity.this, DsPhotoEditorActivity.class);
+    dsPhotoEditorIntent.setData(uri);
+
+    dsPhotoEditorIntent.putExtra(
+        DsPhotoEditorConstants.DS_PHOTO_EDITOR_OUTPUT_DIRECTORY, status_fileString);
+
+      intentLauncher.launch(dsPhotoEditorIntent);
+    
+  }
+  private ActivityResultLauncher<Intent> intentLauncher =
+      registerForActivityResult(
+          new ActivityResultContracts.StartActivityForResult(),
+          result -> {
+            if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+              resultIntent = result.getData();
+              imageUri = resultIntent.getData();
+
+              if (imageUri != null) {
+                Log.d(
+                    "MainActivity.java",
+                    "Image Uri  "
+                        + imageUri.toString()
+                        + " File Name: "
+                        + imageUri.getLastPathSegment());
+				
+                uploadToFirebase(imageUri);
+                
+                selectedImage = imageUri;
+              } else {
+                Log.d("MainActivity.java", "Image Uri null");
+              }
+            }
+          });
+  private void showToast(String text) {
+    Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+  }
+  private void uploadToFirebase(Uri uri){
+     
+  selectedImage = uri;
     date = new Date();
     StorageReference sRef =
         FirebaseStorage.getInstance().getReference().child("status").child(date.getTime() + "");
@@ -183,7 +248,9 @@ public class MainActivity extends AppCompatActivity {
                         });
               }
             });
+  
   }
+     
 
   @Override
   protected void onStart() {
