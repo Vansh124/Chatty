@@ -45,7 +45,7 @@ public class GroupAddUsers extends AppCompatActivity {
 
   private String currentUserUid, currentUserName, currentUserProfile;
   private String key;
-  private DatabaseReference groupRef,userRef;
+  private DatabaseReference groupRef, userRef;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -56,9 +56,9 @@ public class GroupAddUsers extends AppCompatActivity {
   }
 
   private void init() {
-	groupRef=FirebaseDatabase.getInstance().getReference().child("Groups");
-    userRef=FirebaseDatabase.getInstance().getReference().child("Users");
-    
+    groupRef = FirebaseDatabase.getInstance().getReference().child("Groups");
+    userRef = FirebaseDatabase.getInstance().getReference().child("Users");
+
     toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
     groupUsersAvailableView = findViewById(R.id.usersAvailableList);
@@ -74,7 +74,7 @@ public class GroupAddUsers extends AppCompatActivity {
         FirebaseDatabase.getInstance().getReference().push().getKey()
             + FirebaseAuth.getInstance().getUid();
 
-    	groupRef
+    groupRef
         .child(key)
         .child("Members")
         .addValueEventListener(
@@ -110,86 +110,82 @@ public class GroupAddUsers extends AppCompatActivity {
     groupUsersAddedView.setLayoutManager(lm);
     groupUsersAddedView.setAdapter(groupUserAddAdp);
 
-    	userRef
-        .addValueEventListener(
-            new ValueEventListener() {
+    userRef.addValueEventListener(
+        new ValueEventListener() {
 
-              @Override
-              public void onDataChange(DataSnapshot p1) {
+          @Override
+          public void onDataChange(DataSnapshot p1) {
 
-                groupAvailList.clear();
-                for (DataSnapshot gSnapShot : p1.getChildren()) {
+            groupAvailList.clear();
+            for (DataSnapshot gSnapShot : p1.getChildren()) {
 
-                  String imageUrl = gSnapShot.child("userProfileImage").getValue(String.class);
-                  String name = gSnapShot.child("name").getValue(String.class);
-                  String uid = gSnapShot.child("uid").getValue(String.class);
+              String imageUrl = gSnapShot.child("userProfileImage").getValue(String.class);
+              String name = gSnapShot.child("name").getValue(String.class);
+              String uid = gSnapShot.child("uid").getValue(String.class);
 
-                  HashMap<String, Object> gAvailUsers = new HashMap<>();
-                  gAvailUsers.put("userAvailImage", imageUrl);
-                  gAvailUsers.put("userAvailName", name);
-                  gAvailUsers.put("uid", uid);
+              HashMap<String, Object> gAvailUsers = new HashMap<>();
+              gAvailUsers.put("userAvailImage", imageUrl);
+              gAvailUsers.put("userAvailName", name);
+              gAvailUsers.put("uid", uid);
 
-                  
-                      groupRef.child(key)
-                      .child("Available_Members")
-                      .child(uid)
-                      .setValue(gAvailUsers)
-                      .addOnCompleteListener(
-                          new OnCompleteListener<Void>() {
+              groupRef
+                  .child(key)
+                  .child("Available_Members")
+                  .child(uid)
+                  .setValue(gAvailUsers)
+                  .addOnCompleteListener(
+                      new OnCompleteListener<Void>() {
 
-                            @Override
-                            public void onComplete(Task<Void> p1) {
+                        @Override
+                        public void onComplete(Task<Void> p1) {
 
-                              	
-                                  groupRef.child(key)
-                                  .child("Available_Members")
-                                  .addValueEventListener(
-                                      new ValueEventListener() {
+                          groupRef
+                              .child(key)
+                              .child("Available_Members")
+                              .addValueEventListener(
+                                  new ValueEventListener() {
 
-                                        @Override
-                                        public void onDataChange(DataSnapshot p1) {
+                                    @Override
+                                    public void onDataChange(DataSnapshot p1) {
 
-                                          groupAvailList.clear();
+                                      groupAvailList.clear();
 
-                                          for (DataSnapshot dSnapshot : p1.getChildren()) {
-                                            groupUsersAvailable gAvailUsers =
-                                                dSnapshot.getValue(groupUsersAvailable.class);
+                                      for (DataSnapshot dSnapshot : p1.getChildren()) {
+                                        groupUsersAvailable gAvailUsers =
+                                            dSnapshot.getValue(groupUsersAvailable.class);
 
-                                            String imageUrl =
-                                                dSnapshot
-                                                    .child("userAvailImage")
-                                                    .getValue(String.class);
-                                            String name =
-                                                dSnapshot
-                                                    .child("userAvailName")
-                                                    .getValue(String.class);
-                                            String uid =
-                                                dSnapshot.child("uid").getValue(String.class);
+                                        String imageUrl =
+                                            dSnapshot
+                                                .child("userAvailImage")
+                                                .getValue(String.class);
+                                        String name =
+                                            dSnapshot.child("userAvailName").getValue(String.class);
+                                        String uid = dSnapshot.child("uid").getValue(String.class);
 
-                                            gAvailUsers.setUserAvailImage(imageUrl);
-                                            gAvailUsers.setUserAvailName(name);
-                                            gAvailUsers.setUid(uid);
+                                        gAvailUsers.setUserAvailImage(imageUrl);
+                                        gAvailUsers.setUserAvailName(name);
+                                        gAvailUsers.setUid(uid);
 
-                                            if (!gAvailUsers
-                                                .getUid()
-                                                .equals(FirebaseAuth.getInstance().getUid())) {
-                                              groupAvailList.add(gAvailUsers);
-                                            }
-                                            groupUsersAvailAdapter.notifyDataSetChanged();
-                                          }
+                                        if (!gAvailUsers
+                                            .getUid()
+                                            .equals(FirebaseAuth.getInstance().getUid())) {
+                                          groupAvailList.add(gAvailUsers);
                                         }
+                                        groupUsersAvailAdapter.notifyDataSetChanged();
+                                      }
+                                    }
 
-                                        @Override
-                                        public void onCancelled(DatabaseError p2) {}
-                                      });
-                            }
-                          });
-                }
-              }
+                                    @Override
+                                    public void onCancelled(DatabaseError p2) {}
+                                  });
+                        }
+                      });
+            }
+          }
 
-              @Override
-              public void onCancelled(DatabaseError p1) {}
-            });
+          @Override
+          public void onCancelled(DatabaseError p1) {}
+        });
     groupUsersAvailAdapter =
         new groupUsersAvailableAdapter(GroupAddUsers.this, groupAvailList, key);
 
@@ -204,35 +200,33 @@ public class GroupAddUsers extends AppCompatActivity {
           @Override
           public void onRefresh() {
 
-            
-                userRef.addValueEventListener(
-                    new ValueEventListener() {
+            userRef.addValueEventListener(
+                new ValueEventListener() {
 
-                      @Override
-                      public void onDataChange(DataSnapshot p1) {
-                        groupAvailList.clear();
-                        for (DataSnapshot gSnapShot : p1.getChildren()) {
+                  @Override
+                  public void onDataChange(DataSnapshot p1) {
+                    groupAvailList.clear();
+                    for (DataSnapshot gSnapShot : p1.getChildren()) {
 
-                           groupUsersAvailable gAvailUsers =
-                              gSnapShot.getValue(groupUsersAvailable.class);
-                          String imageUrl =
-                              gSnapShot.child("userProfileImage").getValue(String.class);
-                          String name = gSnapShot.child("name").getValue(String.class);
-                          String uid = gSnapShot.child("uid").getValue(String.class);
+                      groupUsersAvailable gAvailUsers =
+                          gSnapShot.getValue(groupUsersAvailable.class);
+                      String imageUrl = gSnapShot.child("userProfileImage").getValue(String.class);
+                      String name = gSnapShot.child("name").getValue(String.class);
+                      String uid = gSnapShot.child("uid").getValue(String.class);
 
-                          gAvailUsers.setUserAvailImage(imageUrl);
-                          gAvailUsers.setUserAvailName(name);
-                          gAvailUsers.setUid(uid);
-                          if (!gAvailUsers.getUid().equals(FirebaseAuth.getInstance().getUid())) {
-                            groupAvailList.add(gAvailUsers);
-                          }
-                        }
-                        groupUsersAvailAdapter.notifyDataSetChanged();
+                      gAvailUsers.setUserAvailImage(imageUrl);
+                      gAvailUsers.setUserAvailName(name);
+                      gAvailUsers.setUid(uid);
+                      if (!gAvailUsers.getUid().equals(FirebaseAuth.getInstance().getUid())) {
+                        groupAvailList.add(gAvailUsers);
                       }
+                    }
+                    groupUsersAvailAdapter.notifyDataSetChanged();
+                  }
 
-                      @Override
-                      public void onCancelled(DatabaseError p1) {}
-                    });
+                  @Override
+                  public void onCancelled(DatabaseError p1) {}
+                });
             if (refreshLayout.isRefreshing()) {
               refreshLayout.setRefreshing(false);
             }
@@ -244,8 +238,9 @@ public class GroupAddUsers extends AppCompatActivity {
 
           @Override
           public void onClick(View view) {
-            	
-                userRef.child(FirebaseAuth.getInstance().getUid())
+
+            userRef
+                .child(FirebaseAuth.getInstance().getUid())
                 .addValueEventListener(
                     new ValueEventListener() {
 
@@ -260,8 +255,9 @@ public class GroupAddUsers extends AppCompatActivity {
                           currentUserGroup.put("uid", currentUserUid);
                           currentUserGroup.put("userAvailImage", currentUserProfile);
                           currentUserGroup.put("userAvailName", currentUserName);
-                          
-                              groupRef.child(key)
+
+                          groupRef
+                              .child(key)
                               .child("Members")
                               .child(FirebaseAuth.getInstance().getUid())
                               .setValue(currentUserGroup)
@@ -327,6 +323,5 @@ public class GroupAddUsers extends AppCompatActivity {
   protected void onDestroy() {
     super.onDestroy();
     FirebaseDatabase.getInstance().getReference().child("Groups").child(key).removeValue();
-    
   }
 }
