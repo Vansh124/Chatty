@@ -1,10 +1,13 @@
 package com.amol.realapp.chatty.activity;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.StrictMode;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -24,6 +27,8 @@ import com.amol.realapp.chatty.adapter.groupMessageAdapter;
 import com.amol.realapp.chatty.model.Message;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.dsphotoeditor.sdk.activity.DsPhotoEditorActivity;
+import com.dsphotoeditor.sdk.utils.DsPhotoEditorConstants;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -49,9 +54,7 @@ public class GroupChatActivity extends AppCompatActivity {
   private Toolbar tb;
   private ArrayList<Message> messages;
   private groupMessageAdapter gMessageAdapter;
-  private String groupName, txt_profile, recieverUid, senderUid;
-  private String senderRoom, mainRoom;
-  private String filePath, pdfFilePath;
+  private String groupName, txt_profile, recieverUid, senderUid ,gImages_fileString,senderRoom,mainRoom,filePath,pdfFilePath,randomKey;
   private FloatingActionButton sendMessage;
   private EditText messageBox;
   private FirebaseDatabase database;
@@ -64,11 +67,10 @@ public class GroupChatActivity extends AppCompatActivity {
 
   private LinearLayout attachPdfs, attachDoc, attachAudio, attachGallery;
 
-  private static final int GET_GALLERY = 11;
-  private static final int GET_PDFS = 12;
-
   private File uploadFile;
-
+  private Uri selectedImage,imageUri;
+  private Intent resultIntent;
+  
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -156,6 +158,8 @@ public class GroupChatActivity extends AppCompatActivity {
           @Override
           public void onClick(View view) {}
         });
+      randomKey = database.getReference().push().getKey();
+
   }
 
   ActivityResultLauncher<String> getImageFromGallery =
@@ -172,7 +176,58 @@ public class GroupChatActivity extends AppCompatActivity {
 
   private void getImageFromActivityLauncher(Uri uri) {
 
-    Uri selectedImage = uri;
+    File f1 =
+        new File(
+            Environment.getExternalStorageDirectory() + "/" + "Chatty" + "/" + "GroupImages",
+            FirebaseAuth.getInstance().getCurrentUser().getUid());
+    if (!f1.exists()) {
+      f1.mkdirs();
+    }
+    gImages_fileString =
+        "Chatty"
+            + File.separator
+            + "GroupImages"
+            + File.separator
+            + randomKey;
+
+    
+    Intent dsPhotoEditorIntent = new Intent(GroupChatActivity.this, DsPhotoEditorActivity.class);
+    dsPhotoEditorIntent.setData(uri);
+
+    dsPhotoEditorIntent.putExtra(
+        DsPhotoEditorConstants.DS_PHOTO_EDITOR_OUTPUT_DIRECTORY, gImages_fileString);
+
+      intentLauncher.launch(dsPhotoEditorIntent);
+    
+  }
+  private ActivityResultLauncher<Intent> intentLauncher =
+      registerForActivityResult(
+          new ActivityResultContracts.StartActivityForResult(),
+          result -> {
+            if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+              resultIntent = result.getData();
+              imageUri = resultIntent.getData();
+
+              if (imageUri != null) {
+                Log.d(
+                    "GroupChatActivity.java",
+                    "Image Uri  "
+                        + imageUri.toString()
+                        + " File Name: "
+                        + imageUri.getLastPathSegment());
+				
+                uploadToFirebase(imageUri);
+                
+                selectedImage = imageUri;
+              } else {
+                Log.d("GroupChatActivity.java", "Image Uri null");
+              }
+            }
+          });
+  private void uploadToFirebase(Uri uri){
+     
+     
+    selectedImage = uri;
     Calendar cal = Calendar.getInstance();
 
     StorageReference strRef =
@@ -208,8 +263,8 @@ public class GroupChatActivity extends AppCompatActivity {
                 }
               }
             });
-    
-  }
+     
+     }
 
   ActivityResultLauncher<String> getPdfFromFiles =
       registerForActivityResult(
@@ -291,10 +346,9 @@ public class GroupChatActivity extends AppCompatActivity {
 
   private void sendMessage(String messageTxt) {
 
-    final String randomKey = database.getReference().push().getKey();
-
+    
     Date date = new Date();
-    final Message message = new Message(messageTxt, senderUid, date.getTime());
+    Message message = new Message(messageTxt, senderUid, date.getTime());
 
     messageBox.setText("");
 
@@ -330,10 +384,9 @@ public class GroupChatActivity extends AppCompatActivity {
   }
 
   private void sendMessageWithImage(String messageTxt) {
-    final String randomKey = database.getReference().push().getKey();
-
+    
     Date date = new Date();
-    final Message message = new Message(messageTxt, senderUid, date.getTime());
+    Message message = new Message(messageTxt, senderUid, date.getTime());
     message.setMessage("Photo");
     message.setImageUrl(filePath);
 
@@ -412,8 +465,7 @@ public class GroupChatActivity extends AppCompatActivity {
   }
 
   private void sendMessageWithPdf(String messageTxt) {
-    String randomKey = database.getReference().push().getKey();
-
+      
     Date date = new Date();
     Message message = new Message(messageTxt, senderUid, date.getTime());
     message.setMessage("Pdf");
