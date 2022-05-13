@@ -123,5 +123,10 @@
         <item name="fontFamily">@font/josefin_sans_bold</item>
         <item name="android:fontFamily">@font/josefin_sans_bold</item>
     </style>
-
+	
+    <style name="DsPhototEditorStyleActivity" parent="Theme.Material3.Light.NoActionBar">
+    
+     <item name="android:statusBarColor">#FF273239</item>
+     
+    </style>
 </resources>
