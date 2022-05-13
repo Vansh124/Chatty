@@ -20,6 +20,11 @@ jobs:
         distribution: 'temurin'
         cache: gradle
 
+    - name: Build debug apk
+        uses: eskatos/gradle-command-action@v1
+        with:
+          arguments: :app:clean :app:build
+
     - name: Upload APK
       uses: actions/upload-artifact@v2
       if: ${{ !github.head_ref }}
