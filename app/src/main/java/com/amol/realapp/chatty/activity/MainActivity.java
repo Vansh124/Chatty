@@ -16,7 +16,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import com.amol.realapp.chatty.LogMSender;
+import com.amol.realapp.chatty.LogSender;
 import com.amol.realapp.chatty.R;
 import com.amol.realapp.chatty.databinding.ActivityMainBinding;
 import com.amol.realapp.chatty.fragment.ChatsFragment;
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    new LogMSender().loggingStart(this);
+    LogSender.startLogging(this);
     super.onCreate(savedInstanceState);
     binding = ActivityMainBinding.inflate(getLayoutInflater());
     setContentView(binding.getRoot());
