@@ -1,7 +1,6 @@
 package com.amol.realapp.chatty;
 
 import android.app.Application;
-import com.amol.realapp.chatty.LogMSender;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.appcheck.FirebaseAppCheck;
 import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory;
@@ -12,7 +11,6 @@ public class MyApplication extends Application {
   @Override
   public void onCreate() {
     super.onCreate();
-    new LogMSender().loggingStart(this);
     
     FirebaseDatabase.getInstance().setPersistenceEnabled(true);
     FirebaseApp.initializeApp(this);
