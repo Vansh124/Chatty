@@ -4,7 +4,9 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:gravity="center"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    android:id="@+id/dialog_view_user_profileContainer"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -31,7 +33,7 @@
             android:layout_weight="1.0"
             android:padding="5dp"
             android:src="@drawable/dialog_user_info"
-            android:tint="@color/light_blue_500" />
+            app:tint="@color/light_blue_500" />
     </LinearLayout>
 
     <ImageView
