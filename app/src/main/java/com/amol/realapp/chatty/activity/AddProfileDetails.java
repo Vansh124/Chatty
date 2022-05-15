@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -20,6 +21,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import com.amol.realapp.chatty.R;
+import com.amol.realapp.chatty.databinding.ActivityProfileDetailsBinding;
 import com.amol.realapp.chatty.model.userProfile;
 import com.dsphotoeditor.sdk.activity.DsPhotoEditorActivity;
 import com.dsphotoeditor.sdk.utils.DsPhotoEditorConstants;
@@ -51,20 +53,22 @@ public class AddProfileDetails extends AppCompatActivity {
   private View dialog_Updating_Layout_View;
   private AlertDialog dialog;
   private userProfile profile;
-
+  private LinearLayout activity_profile_detailsContainer;
+  
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_profile_details);
     init();
     initListener();
+    
   }
 
   private void init() {
     database = FirebaseDatabase.getInstance();
     storage = FirebaseStorage.getInstance();
     mAuth = FirebaseAuth.getInstance();
-
+    activity_profile_detailsContainer = findViewById(R.id.activity_profile_detailsContainer);
     userName = findViewById(R.id.userProfileUsername);
     userProfileImage = findViewById(R.id.profile_image);
     proceedUserDetails = findViewById(R.id.userProceedDetails);
@@ -90,7 +94,7 @@ public class AddProfileDetails extends AppCompatActivity {
 
             dialog_Updating_Layout_View =
                 LayoutInflater.from(AddProfileDetails.this)
-                    .inflate(R.layout.dialog_updating_profile, null, false);
+                    .inflate(R.layout.dialog_updating_profile, activity_profile_detailsContainer, false);
 
             if (txt_userName.isEmpty()) {
               userName.setError("Please enter your username");
