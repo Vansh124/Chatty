@@ -272,7 +272,7 @@ public class GroupAddUsers extends AppCompatActivity {
                                                 "pushKeyFile", Context.MODE_PRIVATE);
                                         SharedPreferences.Editor edt = sPref.edit();
                                         edt.putString("dbPushKey", key);
-                                        edt.commit();
+                                        edt.apply();
                                         Intent intent =
                                             new Intent(GroupAddUsers.this, GroupActivity.class);
                                         startActivity(intent);
@@ -299,7 +299,7 @@ public class GroupAddUsers extends AppCompatActivity {
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.group_search_users, menu);
     MenuItem searchUsers = menu.findItem(R.id.search);
-    final SearchView searchView = (SearchView) searchUsers.getActionView();
+    SearchView searchView = (SearchView) searchUsers.getActionView();
     searchView.setOnQueryTextListener(
         new SearchView.OnQueryTextListener() {
 
