@@ -9,6 +9,7 @@
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
+        android:allowFullBackupOnly="true"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -59,10 +60,6 @@
             android:name=".activity.GroupAddUsers"
             android:exported="true"
             android:label="Add Users"
-            android:launchMode="singleTop" />
-        <activity
-            android:name=".activity.StatusViewActivity"
-            android:exported="true"
             android:launchMode="singleTop" />
         <activity
             android:name=".activity.GroupChatActivity"
