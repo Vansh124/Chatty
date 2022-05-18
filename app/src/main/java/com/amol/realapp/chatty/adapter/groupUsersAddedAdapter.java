@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.amol.realapp.chatty.R;
@@ -23,6 +24,7 @@ public class groupUsersAddedAdapter
   private ArrayList<groupUsersAdded> groupNewAddedUsers;
   private DatabaseReference userAddedAvailableReference;
   private String key;
+  private LinearLayout dialog_view_user_profileContainer;
 
   public groupUsersAddedAdapter(
       Context context, ArrayList<groupUsersAdded> groupNewAddedUsers, String key) {
@@ -44,7 +46,7 @@ public class groupUsersAddedAdapter
     userAddedAvailableReference =
         FirebaseDatabase.getInstance().getReference().child("Groups").child(key);
 
-    groupUsersAdded userGroupAdded = groupNewAddedUsers.get(p2);
+    groupUsersAdded userGroupAdded = groupNewAddedUsers.get(p1.getAdapterPosition());
 
     Glide.with(context)
         .load(userGroupAdded.getUserImage())
@@ -64,7 +66,7 @@ public class groupUsersAddedAdapter
             String imageUrl = userGroupAdded.getUserImage();
             String name = userGroupAdded.getUserName();
 
-            groupNewAddedUsers.remove(p2);
+            groupNewAddedUsers.remove(p1.getAdapterPosition());
 
             userAddedAvailableReference
                 .child("Members")

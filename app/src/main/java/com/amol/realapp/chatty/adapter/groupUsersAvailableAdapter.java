@@ -54,7 +54,7 @@ public class groupUsersAvailableAdapter
 
   @Override
   public void onBindViewHolder(
-      groupUsersAvailableAdapter.groupUserAvailItemHolder p1, final int p2) {
+      groupUsersAvailableAdapter.groupUserAvailItemHolder p1, int p2) {
     groupUsersAvailable userGroupAvail = groupAvailList.get(p2);
 
     groupsRef = FirebaseDatabase.getInstance().getReference().child("Groups").child(key);
@@ -72,7 +72,7 @@ public class groupUsersAvailableAdapter
 
           @Override
           public void onClick(View view) {
-            groupUsersAvailable grpUsers = groupAvailList.get(p2);
+            groupUsersAvailable grpUsers = groupAvailList.get(p1.getAdapterPosition());
 
             String uid = grpUsers.getUid();
             String userImage = grpUsers.getUserAvailImage();
@@ -82,7 +82,7 @@ public class groupUsersAvailableAdapter
             userAddedGroup.put("userImage", userImage);
             userAddedGroup.put("userName", userName);
             userAddedGroup.put("uid", uid);
-            groupAvailList.remove(p2);
+            groupAvailList.remove(p1.getAdapterPosition());
 
             groupsRef.child("Available_Members").child(grpUsers.getUid()).removeValue();
 
