@@ -170,14 +170,13 @@ public class userAdapter extends RecyclerView.Adapter<userAdapter.userItemHolder
 
   public class userItemHolder extends RecyclerView.ViewHolder {
     ShapeableImageView profileImage;
-    TextView username, time, userChatMessage, userChatTime;
+    TextView username, userChatMessage, userChatTime;
     MaterialCardView chatsDetailsContainer;
 
     public userItemHolder(View v) {
       super(v);
       profileImage = v.findViewById(R.id.userImage);
       username = v.findViewById(R.id.userName);
-      time = v.findViewById(R.id.userTime);
       chatsDetailsContainer = v.findViewById(R.id.chatsDetailsContainer);
       userChatMessage = v.findViewById(R.id.userChatMessage);
       userChatTime = v.findViewById(R.id.userTime);
