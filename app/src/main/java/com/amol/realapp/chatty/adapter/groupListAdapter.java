@@ -109,7 +109,7 @@ public class groupListAdapter extends RecyclerView.Adapter<groupListAdapter.grou
               // TODO click
               View v =
                   LayoutInflater.from(context)
-                      .inflate(R.layout.dialog_view_user_profile_lists, null, false);
+                      .inflate(R.layout.dialog_view_user_profile_lists, p1.groupContainer, false);
               final Dialog s = new Dialog(context);
               s.setContentView(v);
               s.show();

@@ -45,8 +45,8 @@ public class userAdapter extends RecyclerView.Adapter<userAdapter.userItemHolder
   }
 
   @Override
-  public void onBindViewHolder(final userAdapter.userItemHolder p1, int p2) {
-    final userProfile user = users.get(p2);
+  public void onBindViewHolder(userAdapter.userItemHolder p1, int p2) {
+    userProfile user = users.get(p2);
 
     String senderId = FirebaseAuth.getInstance().getUid();
     String senderRoom = senderId + user.getUid();
@@ -116,10 +116,11 @@ public class userAdapter extends RecyclerView.Adapter<userAdapter.userItemHolder
           public boolean onTouch(View view, MotionEvent event) {
             int action = event.getAction();
             if (action == MotionEvent.ACTION_DOWN) {
+                
               // TODO click
               View v =
                   LayoutInflater.from(context)
-                      .inflate(R.layout.dialog_view_user_profile_lists, null, false);
+                      .inflate(R.layout.dialog_view_user_profile_lists, p1.chatsDetailsContainer, false);
               Dialog mBuilder = new Dialog(context);
               mBuilder.setContentView(v);
               mBuilder.setCancelable(true);
